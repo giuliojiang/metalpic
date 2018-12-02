@@ -1,0 +1,23 @@
+{
+  "name": "metalpic",
+  "version": "1.0.0",
+  "description": "Bare metal HTML web componenents based gallery and picture album",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giuliojiang/metalpic.git"
+  },
+  "author": "giuliojiang",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/giuliojiang/metalpic/issues"
+  },
+  "homepage": "https://github.com/giuliojiang/metalpic#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "google-auth-library": "^2.0.1"
+  }
+}
