@@ -3,7 +3,9 @@ const express = require("express");
 
 var priv = {};
 priv.conf = null;
-// conf has: googleClientId
+// conf has: 
+// googleClientId
+// bucket
 
 module.exports.createApp = function(conf) {
     priv.conf = conf;
