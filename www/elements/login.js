@@ -12,7 +12,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
         padding: 30px;
     }
 </style>
-<div class="g-signin2 metalpic-login-signin" data-onsuccess="jpress_on_google_sign_in"></div>
+<div id="metalpic-login-signin" class="metalpic-login-signin"></div>
         `; 
 
         jpress.gsignin.callWhenLoginSuccessful(() => {
@@ -29,6 +29,9 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
 
     draw() {
         render(this.template(), this);
+        gapi.signin2.render("metalpic-login-signin", {
+            'onsuccess': jpress_on_google_sign_in
+        })
     }
 
 })
