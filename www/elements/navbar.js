@@ -32,3 +32,5 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
     }
 
 });
+
+console.info("metalpic-navbar loaded");
