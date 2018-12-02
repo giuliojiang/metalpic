@@ -2,6 +2,9 @@
 
 // based on https://developers.google.com/identity/sign-in/web/backend-auth
 
+if (window.jpress == null) {
+    window.jpress = {};
+}
 jpress.gsignin = {};
 jpress.gsignin.token = null; // Will hold the token when user is signed in
 jpress.gsignin.signOut = null; // Function to sign out

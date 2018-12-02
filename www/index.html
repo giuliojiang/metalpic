@@ -2,8 +2,13 @@
     <head>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="google-signin-client_id" content="563668215690-02hfdo9l55mpjp8dtb2brms4rbajienh.apps.googleusercontent.com">
+        <link rel="stylesheet" href="style.css">
+        <script src="/elements/navbar.js"></script>
+        <script src="/lib/gsignin.js"></script>
+        <script src="/index.js"></script>
     </head>
     <body>
-        <div class="g-signin2" data-onsuccess="jpress_on_google_sign_in"></div>
+        <metalpic-navbar></metalpic-navbar>
+        <div class="g-signin2" data-onsuccess="jpress_on_google_sign_in" style="padding: 30px;"></div>
     </body>
 </html>
