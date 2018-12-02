@@ -19,7 +19,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
             var event = new Event("metalpic-routechange");
             event.newRoute = "metalpic-hub";
             this.dispatchEvent(event);
-            console.info("Dispatched routechange event");
+            console.info("Dispatched routechange to hub");
         });
     }
 
