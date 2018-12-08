@@ -1,8 +1,10 @@
 var priv = {};
-// conf has: 
+// priv.conf has: 
 // googleClientId
 // bucket
 // uploadDir
+// mongoUrl
+// mongoDb
 
 module.exports.set = function(conf) {
     priv.conf = conf;
