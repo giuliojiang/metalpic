@@ -7,7 +7,8 @@ const fs = require("fs");
 module.exports.uploadHandler = function() {
     var app = express();
 
-    app.post("/:name/:token", async (req, res) => {
+    app.post("/:album/:name/:token", async (req, res) => {
+        console.info("Album name is " + req.params.album);
         var newFilePath = path.resolve(conf.get().uploadDir, req.params.name);
         console.info("Saving to " + newFilePath);
         var token = req.params.token;
