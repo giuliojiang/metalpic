@@ -14,3 +14,11 @@ module.exports.stringNullOrEmpty = function(s) {
     }
     return false;
 }
+
+module.exports.sleep = function(duration) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve();
+        }, duration);
+    });
+}

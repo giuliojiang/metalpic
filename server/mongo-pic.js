@@ -31,7 +31,7 @@ module.exports.insertPic = async function(name, albumid) {
 
     let doc = {
         name: name,
-        // albumid: new mongodb.ObjectId(albumid),
+        albumid: new mongodb.ObjectId(albumid),
         ready: false
     };
 
