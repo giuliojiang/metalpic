@@ -1,9 +1,12 @@
+"use strict";
+
 window.customElements.define("metalpic-upload", class extends HTMLElement {
 
     // Init ===================================================================
 
     constructor() {
         super();
+        this.files = null;
     }
 
     // Events =================================================================
@@ -13,12 +16,18 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
         this.render();
     }
 
-    registerEventListeners() {
-        var inputElem = this.shadow.querySelector("[data-fileupload]");
+    registerFileUploadListeners(inputElem) {
+        var onSelectFile = async () => {
+            this.files = inputElem.files;
+        };
+        inputElem.addEventListener("change", onSelectFile, false);
+    }
 
+    registerButtonEventListeners(button) {
         var upload = async (file) => {
             console.info("Uploading file " + file.name);
             var albumNameComp = encodeURIComponent(this.getAlbumName());
+            console.info("<><><> albumname comp is " + albumNameComp);
             var fileNameComp = encodeURIComponent(file.name);
             var gsigninTokenComp = encodeURIComponent(jpress.gsignin.token);
             var response = await fetch(`/api/upload/${albumNameComp}/${fileNameComp}/${gsigninTokenComp}`, {
@@ -29,14 +38,18 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
             });
         };
 
-        var onSelectFile = async () => {
-            for (var i = 0; i < inputElem.files.length; i++) {
-                await upload(inputElem.files[i]);
+        button.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            if (this.files == null) {
+                window.alert("Please select files first");
             }
-        };
-
-        inputElem.addEventListener("change", onSelectFile, false);
-
+            if (utils.stringNullOrEmpty(this.getAlbumName())) {
+                window.alert("Album name cannot be empty");
+            }
+            for (var i = 0; i < this.files.length; i++) {
+                await upload(this.files[i]);
+            }
+        });
     }
 
     // Draw ===================================================================
@@ -45,7 +58,10 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
         this.shadow = this.attachShadow({mode: 'open'});
         this.shadow.innerHTML = `
         <style>
-
+            .container {
+                padding-left: 10px;
+                padding-top: 10px;
+            }
         </style>
         <div data-body></div>
         `;
@@ -62,37 +78,59 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
         this.drawTitle(body);
         this.drawAlbumInput(body);
         this.drawUploader(body);
-
-        this.registerEventListeners();
+        this.drawUploadButton(body);
     }
 
     drawTitle(body) {
-        let pElem = document.createElement("p");
-        pElem.innerText = "Metalpic uploader";
-        body.appendChild(pElem);
+        this.drawInDiv(body, (div) => {
+            let pElem = document.createElement("p");
+            pElem.innerText = "Metalpic uploader";
+            div.appendChild(pElem);
+        });
     }
 
     drawAlbumInput(body) {
-        let inputElem = document.createElement("input");
-        inputElem.setAttribute("type", "text");
-        inputElem.setAttribute("data-albumname", "");
-        inputElem.setAttribute("placeholder", "Album name");
-        body.appendChild(inputElem);
+        this.drawInDiv(body, (div) => {
+            let inputElem = document.createElement("input");
+            inputElem.setAttribute("type", "text");
+            inputElem.setAttribute("data-albumname", "");
+            inputElem.setAttribute("placeholder", "Album name");
+            div.appendChild(inputElem);
+        })
     }
 
     drawUploader(body) {
-        let inputElem = document.createElement("input");
-        inputElem.setAttribute("type", "file");
-        inputElem.setAttribute("data-fileupload", "");
-        inputElem.setAttribute("multiple", "");
-        body.appendChild(inputElem);
+        this.drawInDiv(body, (div) => {
+            let inputElem = document.createElement("input");
+            inputElem.setAttribute("type", "file");
+            inputElem.setAttribute("data-fileupload", "");
+            inputElem.setAttribute("multiple", "");
+            div.appendChild(inputElem);
+            this.registerFileUploadListeners(inputElem);
+        });
+    }
+
+    drawUploadButton(body) {
+        this.drawInDiv(body, (div) => {
+            let button = document.createElement("button");
+            div.appendChild(button);
+            button.innerText = "Upload";
+            this.registerButtonEventListeners(button);
+        });
     }
 
     // Private ================================================================
 
+    drawInDiv(body, func) {
+        let div = document.createElement("div");
+        div.classList.add("container");
+        body.appendChild(div);
+        func(div);
+    }
+
     getAlbumName() {
         let inputElem = this.shadow.querySelector("[data-albumname]");
-        return inputElem.text;
+        return inputElem.value;
     }
 
 })
