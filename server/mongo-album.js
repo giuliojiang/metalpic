@@ -23,29 +23,12 @@ module.exports.createAlbum = async function(albumName) {
         throw new Error("album name is null or empty");
     }
 
-    let session = await mongo.startSession();
     let collection = await mongo.getCollection(ALBUM_COLLECTION);
-    session.startTransaction({
-        readConcern: {
-            level: "snapshot"
-        },
-        writeConcern: {
-            w: "majority"
-        }
-    });
-
-    let closeAndReturn = async (data) => {
-        await session.commitTransaction();
-        session.endSession();
-        return data;
-    }
 
     // Find if there are existing
 
     let docs = await collection.find({
         name: albumName
-    }, {
-        session: session
     }).toArray();
 
     if (docs.length > 0) {
@@ -53,17 +36,15 @@ module.exports.createAlbum = async function(albumName) {
         let doc = docs[0];
         let existingId = doc._id.toString();
         logger.info("An album already exists, id is " + existingId);
-        return await closeAndReturn(existingId);
+        return existingId;
     } else {
         // A document should be created
         let res = await collection.insertOne({
             name: albumName,
             public: false
-        }, {
-            session: session
         });
         let insertedId = res.insertedId.toString();
         logger.info("Created new album with id " + insertedId);
-        return await closeAndReturn(insertedId);
+        return insertedId;
     }
 }

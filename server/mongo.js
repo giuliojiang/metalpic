@@ -15,18 +15,16 @@ module.exports.getCollection = async function(collectionName) {
     return collection;
 }
 
-// return: Promise<ClientSession>
-module.exports.startSession = async function() {
-    let client = await priv.getClient();
-    return client.startSession();
-}
-
 // Private ====================================================================
 
 priv.getClient = async function() {
+    if (priv.client != null) {
+        return priv.client;
+    }
     let MongoClient = mongodb.MongoClient;
     let url = conf.get().mongoUrl;
 
     let client = await MongoClient.connect(url);
+    priv.client = client;
     return client;
 }
