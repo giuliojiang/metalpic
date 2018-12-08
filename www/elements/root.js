@@ -5,7 +5,6 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
     constructor() {
         super();
         this.template = () => html`
-<metalpic-navbar></metalpic-navbar>
 <metalpic-router></metalpic-router>
         `; 
     }

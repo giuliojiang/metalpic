@@ -1,5 +1,8 @@
 window.customElements.define("metalpic-router", class extends HTMLElement {
 
+    // Input events:
+    // - metalpic-routechange
+
     constructor() {
         super();
 
@@ -18,7 +21,10 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     }
 
     draw() {
-        this.innerHTML = `<${this.currentRoute}></${this.currentRoute}>`;
+        this.innerHTML = `
+        <metalpic-navbar></metalpic-navbar>
+        <${this.currentRoute}></${this.currentRoute}>
+        `;
     }
 
 });
