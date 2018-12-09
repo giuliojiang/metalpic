@@ -20,6 +20,15 @@ module.exports.uploadHandler = function() {
             var username = user.name;
             logger.info("User is " + username);
             logger.info("User id is " + user.id);
+            logger.info("typeof id: " + typeof user.id);
+
+            // Check user
+            let allowedUsers = conf.get().allowedUsers;
+            if (!allowedUsers.has(user.id)) {
+                logger.info("Unauthorized");
+                res.sendStatus(403);
+                return;
+            }
 
             // Create album if not exists
             let albumid = await mongoalbum.createAlbum(req.params.album);
