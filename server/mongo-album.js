@@ -1,8 +1,9 @@
 // Album collection
 // {
 //     _id
-//     name
-//     public
+//     name: string
+//     public: bool
+//     created: 
 // }
 
 const path = require("path");
