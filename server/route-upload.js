@@ -17,10 +17,6 @@ module.exports.uploadHandler = function() {
             var token = req.params.token;
             logger.info("Token is " + token);
             var user = await authentication.authenticate(token);
-            var username = user.name;
-            logger.info("User is " + username);
-            logger.info("User id is " + user.id);
-            logger.info("typeof id: " + typeof user.id);
 
             // Check user
             let allowedUsers = conf.get().allowedUsers;

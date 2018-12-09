@@ -7,11 +7,9 @@
 // }
 
 const path = require("path");
-const mongo = require(path.resolve(__dirname, "mongo.js"));
 const util = require(path.resolve(__dirname, "util.js"));
 const logger = require(path.resolve(__dirname, "logger.js")).getLogger("mongo-album");
-
-const ALBUM_COLLECTION = "album";
+const mongoose = require(path.resolve(__dirname, "mongoose.js"));
 
 // Create a new album.
 // It's private by default
@@ -24,28 +22,31 @@ module.exports.createAlbum = async function(albumName) {
         throw new Error("album name is null or empty");
     }
 
-    let collection = await mongo.getCollection(ALBUM_COLLECTION);
+    logger.info("Checking and creating album " + albumName);
 
-    // Find if there are existing
-
-    let docs = await collection.find({
+    let existingAlbums = await mongoose.Album.find({
         name: albumName
-    }).toArray();
+    }).exec();
 
-    if (docs.length > 0) {
-        // A document already exists
-        let doc = docs[0];
-        let existingId = doc._id.toString();
-        logger.info("An album already exists, id is " + existingId);
-        return existingId;
-    } else {
-        // A document should be created
-        let res = await collection.insertOne({
+    logger.info("existingAlbums length is " + existingAlbums.length);
+
+    var albumId = null;
+    if (existingAlbums.length == 0) {
+        logger.info("the album doesn't exist, creating a new one");
+        // Create new one
+        let newAlbum = new mongoose.Album({
             name: albumName,
-            public: false
+            public: false,
+            created: new Date()
         });
-        let insertedId = res.insertedId.toString();
-        logger.info("Created new album with id " + insertedId);
-        return insertedId;
+        let savedAlbum = await newAlbum.save();
+        albumId = savedAlbum.id;
+    } else {
+        logger.info("the album already exists, getting its id");
+        let theAlbum = existingAlbums[0];
+        albumId = theAlbum.id;
     }
+    logger.info("the album id is " + albumId);
+
+    return albumId;
 }

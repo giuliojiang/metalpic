@@ -16,7 +16,15 @@ module.exports.connect = async function() {
         created: Date
     });
 
-    module.exports.Album = mongoose.model("Album", albumSchema);
+    module.exports.Album = priv.db.model("Album", albumSchema);
+
+    let picSchema = new mongoose.Schema({
+        name: String,
+        albumid: String,
+        ready: Boolean
+    });
+
+    module.exports.Pic = priv.db.model("Pic", picSchema);
 
     logger.info("mongoose models initialized");
 }
