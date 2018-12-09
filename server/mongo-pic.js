@@ -40,3 +40,33 @@ module.exports.insertPic = async function(name, albumid) {
     logger.info("inserted id is " + insertedId.toString());
     return insertedId.toString();
 }
+
+// Sets a picture's 'ready' to true
+// picid: string, _id field of the picture to be updated
+// return: Promise<void>
+module.exports.setAsReady = async function(picid) {
+    let collection = await mongo.getCollection(PIC_COLLECTION);
+
+    // sanitize
+    if (util.stringNullOrEmpty(picid)) {
+        throw new Error("picid is null or empty");
+    }
+
+    let filter = {
+        _id: new mongodb.ObjectId(picid)
+    };
+
+    let update = {
+        $set: {
+            ready: true
+        }
+    };
+
+    let result = await collection.updateOne(filter, update);
+    let matchedCount = result.matchedCount;
+    if (matchedCount == 0) {
+        throw new Error(`No picture with id ${picid} was found and updated`);
+    }
+
+    return;
+}

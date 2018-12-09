@@ -6,6 +6,7 @@ const fs = require("fs");
 const mongopic = require(path.resolve(__dirname, "mongo-pic.js"));
 const logger = require(path.resolve(__dirname, "logger.js")).getLogger("route-upload");
 const mongoalbum = require(path.resolve(__dirname, "mongo-album.js"));
+const s3 = require(path.resolve(__dirname, "s3.js"));
 
 module.exports.uploadHandler = function() {
     var app = express();
@@ -18,6 +19,7 @@ module.exports.uploadHandler = function() {
             var user = await authentication.authenticate(token);
             var username = user.name;
             logger.info("User is " + username);
+            logger.info("User id is " + user.id);
 
             // Create album if not exists
             let albumid = await mongoalbum.createAlbum(req.params.album);
@@ -30,10 +32,13 @@ module.exports.uploadHandler = function() {
             logger.info("Saving to " + newFilePath);
             var filestream = fs.createWriteStream(newFilePath);
             await req.pipe(filestream);
-            filestream.on("finish", () => {
-                // TODO upload to S3
+            filestream.on("finish", async () => {
+                // Upload to S3
+                await s3.uploadFile(newFilePath, picId);
+                logger.info("Uploaded to S3");
 
-                // TODO update the status of the file in mongo
+                // Update the status of the file in mongo
+                await mongopic.setAsReady(picId);
 
                 res.send("Completed");
             });
