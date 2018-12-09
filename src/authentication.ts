@@ -1,11 +1,9 @@
-"use strict";
-
-const path = require("path");
-const {OAuth2Client} = require('google-auth-library');
-const conf = require(path.resolve(__dirname, "conf.js"));
+import { OAuth2Client } from "google-auth-library";
+import * as conf from "./conf";
 
 // ============================================================================
-module.exports.authenticate = async function(googleToken) {
+
+var authenticate = async function(googleToken: string): Promise<{id: string, name: string}> {
     var client = new OAuth2Client(conf.get().googleClientId);
 
     var ticket;
@@ -29,3 +27,5 @@ module.exports.authenticate = async function(googleToken) {
     };
 
 };
+
+export { authenticate }

@@ -1,12 +1,12 @@
-module.exports.isString = function(s) {
+var isString = function(s: any) {
     return typeof s === 'string' || s instanceof String;
 }
 
-module.exports.stringNullOrEmpty = function(s) {
+var stringNullOrEmpty = function(s: any) {
     if (s == null) {
         return true;
     }
-    if (!module.exports.isString(s)) {
+    if (!isString(s)) {
         return true;
     }
     if (s == "") {
@@ -15,10 +15,16 @@ module.exports.stringNullOrEmpty = function(s) {
     return false;
 }
 
-module.exports.sleep = function(duration) {
+var sleep = function(duration: number) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve();
         }, duration);
     });
+}
+
+export {
+    isString,
+    stringNullOrEmpty,
+    sleep
 }

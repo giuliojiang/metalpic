@@ -1,18 +1,19 @@
-const path = require("path");
-const fs = require("fs");
-const conf = require(path.resolve(__dirname, "conf.js"));
-const logger = require(path.resolve(__dirname, "logger.js")).getLogger("s3");
+import * as fs from "fs";
+import * as conf from "./conf";
+import * as loggerFactory from "./logger";
+import * as AWS from "aws-sdk";
+
+const logger = loggerFactory.getLogger("s3");
 
 // Load the SDK for JavaScript
-var AWS = require('aws-sdk');
 // Set the region 
 AWS.config.update({region: 'eu-west-2'});
 
 // Create S3 service object
-s3 = new AWS.S3({apiVersion: '2006-03-01'});
+var s3 = new AWS.S3({apiVersion: '2006-03-01'});
                     
 // Call S3 to list current buckets
-s3.listBuckets(function(err, data) {
+s3.listBuckets(function(err: any, data: any) {
     if (err) {
        logger.error("Error", err);
     } else {
@@ -23,7 +24,7 @@ s3.listBuckets(function(err, data) {
 // filepath: string, location of the file on the local disk
 // fileid: string, name of the file once uploaded on s3
 // Return a Promise<uploadData>
-module.exports.uploadFile = function(filepath, fileid) {
+var uploadFile = function(filepath: string, fileid: string): Promise<AWS.S3.ManagedUpload.SendData> {
     var uploadParams = {
         Bucket: conf.get().bucket,
         Key: '',
@@ -34,11 +35,11 @@ module.exports.uploadFile = function(filepath, fileid) {
     filestream.on("error", (err) => {
         console.info("File error", err);
     });
-    uploadParams.Body = filestream;
+    uploadParams.Body = filestream as any;
     uploadParams.Key = fileid;
 
-    var uploadPromise = new Promise((resolve, reject) => {
-        s3.upload(uploadParams, (err, data) => {
+    var uploadPromise = new Promise<AWS.S3.ManagedUpload.SendData>((resolve, reject) => {
+        s3.upload(uploadParams, (err: Error, data: AWS.S3.ManagedUpload.SendData) => {
             if (err) {
                 reject(err);
             } else {
@@ -49,3 +50,7 @@ module.exports.uploadFile = function(filepath, fileid) {
     
     return uploadPromise;
 };
+
+export {
+    uploadFile
+}

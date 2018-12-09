@@ -6,16 +6,17 @@
 //     ready     false if still uploading
 // }
 
-const path = require("path");
-const util = require(path.resolve(__dirname, "util.js"));
-const logger = require(path.resolve(__dirname, "logger.js")).getLogger("mongo-pic");
-const mongoose = require(path.resolve(__dirname, "mongoose.js"));
+import * as  util from "./util";
+import * as loggerFactory from "./logger";
+import * as mongoose from "./mongoose";
+
+const logger = loggerFactory.getLogger("mongo-pic");
 
 // Inserts a new picture.
 // name: string, name of the image file
 // albumid: string, mongodb id of the album
 // return: Promise<string> the mongodb id of the inserted pic
-module.exports.insertPic = async function(name, albumid) {
+var insertPic = async function(name: string, albumid: string): Promise<string> {
     // sanitize
     if (util.stringNullOrEmpty(name)) {
         throw new Error("name is null or empty");
@@ -24,7 +25,9 @@ module.exports.insertPic = async function(name, albumid) {
         throw new Error("albumid is null or empty");
     }
 
-    let newPic = new mongoose.Pic({
+    let Pic = mongoose.getModel("Pic");
+
+    let newPic = new Pic({
         name: name,
         albumid: albumid,
         ready: false
@@ -40,10 +43,16 @@ module.exports.insertPic = async function(name, albumid) {
 // Sets a picture's 'ready' to true
 // picid: string, _id field of the picture to be updated
 // return: Promise<void>
-module.exports.setAsReady = async function(picid) {
-    await mongoose.Pic.findByIdAndUpdate(picid, {
+var setAsReady = async function(picid: string): Promise<void> {
+    let Pic = mongoose.getModel("Pic");
+    await Pic.findByIdAndUpdate(picid, {
         $set: {
             ready: true
         }
     }).exec();
+}
+
+export {
+    insertPic,
+    setAsReady
 }

@@ -1,13 +1,15 @@
 class Logger {
-    constructor(name) {
+    name: string;
+
+    constructor(name: string) {
         this.name = name;
     }
 
-    info(message) {
+    info(message: string) {
         console.info(`INFO [${this.name}]: ${message}`);
     }
 
-    error(message, err) {
+    error(message: string, err: Error) {
         console.info(`INFO [${this.name}]: ${message}`);
         if (err != null) {
             console.info(err);
@@ -15,6 +17,10 @@ class Logger {
     }
 }
 
-module.exports.getLogger = function(name) {
+var getLogger = function(name: string): Logger {
     return new Logger(name);
+}
+
+export {
+    getLogger
 }

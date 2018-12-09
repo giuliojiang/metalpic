@@ -1,14 +1,16 @@
-const path = require("path");
-const express = require("express");
-const conf = require(path.resolve(__dirname, "conf.js"));
-const authentication = require(path.resolve(__dirname, "authentication.js"));
-const fs = require("fs");
-const mongopic = require(path.resolve(__dirname, "mongo-pic.js"));
-const logger = require(path.resolve(__dirname, "logger.js")).getLogger("route-upload");
-const mongoalbum = require(path.resolve(__dirname, "mongo-album.js"));
-const s3 = require(path.resolve(__dirname, "s3.js"));
+import express = require("express");
+import * as conf from "./conf";
+import * as authentication from "./authentication";
+import * as fs from "fs";
+import * as mongopic from "./mongo-pic";
+import * as loggerFactory from "./logger";
+import * as mongoalbum from "./mongo-album";
+import * as s3 from "./s3";
+import * as path from "path";
 
-module.exports.uploadHandler = function() {
+const logger = loggerFactory.getLogger("route-upload");
+
+var uploadHandler = function() {
     var app = express();
 
     app.post("/:album/:name/:token", async (req, res) => {
@@ -54,4 +56,8 @@ module.exports.uploadHandler = function() {
     });
 
     return app;
+}
+
+export {
+    uploadHandler
 }
