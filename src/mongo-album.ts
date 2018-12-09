@@ -8,7 +8,8 @@
 
 import * as util from "./util";
 import { getLogger } from "./logger";
-import * as mongoose from "./mongoose";
+import * as mongoosemodels from "./mongoose-models";
+import * as mongoose from "mongoose";
 
 const logger = getLogger("mongo-album");
 
@@ -16,7 +17,7 @@ const logger = getLogger("mongo-album");
 // It's private by default
 // albumName: string
 // return: Promise<string> the mongodb id of the new album
-var createAlbum = async function(albumName: string) {
+var createAlbum = async function(albumName: string): Promise<string> {
     
     // sanitize
     if (util.stringNullOrEmpty(albumName)) {
@@ -25,7 +26,7 @@ var createAlbum = async function(albumName: string) {
 
     logger.info("Checking and creating album " + albumName);
 
-    let Album = mongoose.getModel("Album");
+    let Album = mongoosemodels.getModel("Album");
 
     let existingAlbums = await Album.find({
         name: albumName
@@ -54,6 +55,24 @@ var createAlbum = async function(albumName: string) {
     return albumId;
 }
 
+// Finds the albums
+var listAlbums = async function(showPrivate: boolean): Promise<any[]> {
+
+    let Album = mongoosemodels.getModel("Album");
+
+    let query = {} as any;
+    if (!showPrivate) {
+        query.public = true;
+    }
+
+    let existingAlbums = await Album.find(query).sort({
+        created: -1
+    }).exec();
+
+    return existingAlbums;
+}
+
 export {
-    createAlbum
+    createAlbum,
+    listAlbums
 }

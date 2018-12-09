@@ -8,7 +8,7 @@
 
 import * as  util from "./util";
 import * as loggerFactory from "./logger";
-import * as mongoose from "./mongoose";
+import * as mongoose from "./mongoose-models";
 
 const logger = loggerFactory.getLogger("mongo-pic");
 

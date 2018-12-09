@@ -1,4 +1,3 @@
-import {html, render} from 'https://unpkg.com/lit-html?module';
 
 window.customElements.define("metalpic-hub", class extends HTMLElement {
 
@@ -20,6 +19,9 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     connectedCallback() {
         this.draw();
     }
+
+    // Render =================================================================
+    // TODO get list of albums from the server
 
     draw() {
         render(this.template(), this);

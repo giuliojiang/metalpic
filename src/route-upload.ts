@@ -10,7 +10,7 @@ import * as path from "path";
 
 const logger = loggerFactory.getLogger("route-upload");
 
-var uploadHandler = function() {
+var uploadHandler = function(): express.Express {
     var app = express();
 
     app.post("/:album/:name/:token", async (req, res) => {
