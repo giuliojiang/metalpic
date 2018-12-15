@@ -1,0 +1,3 @@
+[submodule "metalpic-priv"]
+	path = metalpic-priv
+	url = https://gitlab.com/giuliojiang/metalpic-priv.git
