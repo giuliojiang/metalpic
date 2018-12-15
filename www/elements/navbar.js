@@ -12,15 +12,6 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
         this.render();
     }
 
-    // Events =================================================================
-
-    handleClick() {
-        let event = new CustomEvent("metalpic-routechange");
-        event.newRoute = "metalpic-hub"
-        this.dispatchEvent(event);
-        console.info("Dispatching event to navigate to hub");
-    }
-
     // Render =================================================================
 
     renderFirst() {
@@ -55,14 +46,11 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
         this.body.appendChild(container);
         container.classList.add("metalpic-navbar");
 
-        let p = document.createElement("p");
+        let p = document.createElement("a");
         container.appendChild(p);
         p.classList.add("metalpic-navbar-text");
         p.innerText = "metalpic";
-        p.addEventListener("click", (e) => {
-            e.stopPropagation();
-            this.handleClick();
-        });
+        utils.addRouterLinkToElement(p, "metalpic-hub", this);
     }
 
 });

@@ -6,14 +6,37 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     constructor() {
         super();
 
-        this.currentRoute = "metalpic-login";
+        this.currentRoute = "";
+        this.currentPath = "";
+
+        // Detect initial route
+        let path = location.pathname;
+        if (path == "/") {
+            this.changeRouteTo("metalpic-login");
+        } else {
+            this.changeRouteTo(path.substr(1));
+        }
 
         this.addEventListener("metalpic-routechange", (event) => {
             console.info("Received routechange event");
             event.stopPropagation();
-            this.currentRoute = event.newRoute;
-            this.draw();
+            this.changeRouteTo(event.newRoute);
         }, true);
+    }
+
+    changeRouteTo(newRoute) {
+        let splt = newRoute.split("/");
+        this.currentRoute = splt[0];
+        let remaining = [];
+        for (let i = 1; i < splt.length; i++) {
+            remaining.push(splt[i]);
+        }
+        let pathJoined = remaining.join("/");
+        this.currentPath = pathJoined;
+        console.info("New route is " + this.currentRoute);
+        console.info("New path is " + this.currentPath);
+        this.draw();
+        // TODO change browser address
     }
 
     connectedCallback() {
@@ -22,7 +45,7 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
 
     draw() {
         this.innerHTML = `
-        <metalpic-navbar></metalpic-navbar>
+        <metalpic-navbar routePath="${this.currentPath}"></metalpic-navbar>
         <${this.currentRoute}></${this.currentRoute}>
         `;
     }

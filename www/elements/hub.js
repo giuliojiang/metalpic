@@ -13,16 +13,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
         this.requestAlbums();
     }
 
-    // Events =================================================================
-
-    handleButtonClick() {
-        let event = new Event("metalpic-routechange");
-        event.newRoute = "metalpic-upload";
-        this.dispatchEvent(event);
-    }
-
     // Render =================================================================
-    // TODO get list of albums from the server
 
     renderFirst() {
         this.shadow = this.attachShadow({mode: "open"});
@@ -45,11 +36,8 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
         }
 
         let uploadLink = document.createElement("a");
+        utils.addRouterLinkToElement(uploadLink, "metalpic-upload", this);
         body.appendChild(uploadLink);
-        uploadLink.addEventListener("click", (e) => {
-            e.stopPropagation();
-            this.handleButtonClick();
-        });
         uploadLink.innerText = "Upload";
 
         if (this.data != null) {
