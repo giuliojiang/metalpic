@@ -1,12 +1,7 @@
-import {html, render} from 'https://unpkg.com/lit-html?module';
-
 window.customElements.define("metalpic-root", class extends HTMLElement {
 
     constructor() {
         super();
-        this.template = () => html`
-<metalpic-router></metalpic-router>
-        `; 
     }
 
     connectedCallback() {
@@ -14,7 +9,9 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
     }
 
     draw() {
-        render(this.template(), this);
+        this.innerHTML = `
+            <metalpic-router></metalpic-router>
+        `;
     }
 
 })

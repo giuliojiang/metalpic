@@ -1,5 +1,8 @@
 window.customElements.define("metalpic-login", class extends HTMLElement {
 
+    // Output events:
+    // metalpic-login-success
+
     constructor() {
 
         super();
@@ -15,6 +18,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
     }
 
     connectedCallback() {
+        console.info("login connected");
         this.renderFirst();
         this.render();
     }
@@ -27,19 +31,6 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
             .metalpic-login-signin {
                 padding: 30px;
             }
-
-            .popup {
-                position: fixed;
-                z-index: 1;
-                left: 25vw;
-                right: 25vw;
-                top: 25vh;
-                bottom: 25vh;
-            }
-
-            .hidden {
-                visibility: hidden;
-            }
         </style>
         `;
         this.body = document.createElement("div");
@@ -50,13 +41,17 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
         this.body.innerHTML = `
             <div id="metalpic-login-signin" class="metalpic-login-signin"></div>
         `;
-        this.body.className = "popup";
         setTimeout(() => {
             gapi.signin2.render("metalpic-login-signin", {
-                'onsuccess': jpress_on_google_sign_in
+                'onsuccess': (googleUser) => {
+                    var id_token = googleUser.getAuthResponse().id_token;
+                    console.info("Login success");
+                    localStorage.token = id_token;
+                    this.dispatchEvent(new CustomEvent("metalpic-login-success"));
+                    console.info("Firing metalpic-login-success")
+                }
             })
             console.info("Rendered gsignin button");
-    
         });
     }
 })

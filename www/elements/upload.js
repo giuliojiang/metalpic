@@ -55,8 +55,7 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
     // Draw ===================================================================
 
     renderFirst() {
-        this.shadow = this.attachShadow({mode: 'open'});
-        this.shadow.innerHTML = `
+        this.innerHTML = `
         <style>
             .container {
                 padding-left: 10px;
@@ -68,17 +67,21 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
     }
 
     render() {
-        let body = this.shadow.querySelector("[data-body]");
+        let body = this.querySelector("[data-body]");
 
         // Clear the body
         while (body.firstChild) {
             body.removeChild(body.firstChild);
         }
 
-        this.drawTitle(body);
-        this.drawAlbumInput(body);
-        this.drawUploader(body);
-        this.drawUploadButton(body);
+        let bodyInner = document.createElement("metalpic-requires-login");
+
+        this.drawTitle(bodyInner);
+        this.drawAlbumInput(bodyInner);
+        this.drawUploader(bodyInner);
+        this.drawUploadButton(bodyInner);
+
+        body.appendChild(bodyInner);
     }
 
     drawTitle(body) {
@@ -129,7 +132,7 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
     }
 
     getAlbumName() {
-        let inputElem = this.shadow.querySelector("[data-albumname]");
+        let inputElem = this.querySelector("[data-albumname]");
         return inputElem.value;
     }
 
