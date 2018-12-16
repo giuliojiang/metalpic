@@ -46,9 +46,10 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
             for (let album of this.data.albums) {
                 let div = document.createElement("div");
                 albumsDiv.appendChild(div);
-                let name = document.createElement("p");
+                let name = document.createElement("a");
                 div.appendChild(name);
                 name.innerText = album.name;
+                utils.addRouterLinkToElement(name, `metalpic-album/${encodeURIComponent(album.name)}`, this);
                 let p = document.createElement("p");
                 div.appendChild(p);
                 p.innerText = album.public ? "public" : "private";

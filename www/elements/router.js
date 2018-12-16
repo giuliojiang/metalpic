@@ -29,7 +29,8 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     }
 
     changeRouteTo(newRoute) {
-        window.history.pushState(newRoute, newRoute, newRoute);
+        console.info("changeRouteTo: " + newRoute);
+        window.history.pushState(newRoute, newRoute, "/" + newRoute);
         this.renderNewState(newRoute);
     }
 
@@ -53,8 +54,8 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
 
     draw() {
         this.innerHTML = `
-        <metalpic-navbar routePath="${this.currentPath}"></metalpic-navbar>
-        <${this.currentRoute}></${this.currentRoute}>
+        <metalpic-navbar></metalpic-navbar>
+        <${this.currentRoute} routepath="${this.currentPath}"></${this.currentRoute}>
         `;
     }
 

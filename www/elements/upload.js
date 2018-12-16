@@ -27,7 +27,6 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
         var upload = async (file) => {
             console.info("Uploading file " + file.name);
             var albumNameComp = encodeURIComponent(this.getAlbumName());
-            console.info("<><><> albumname comp is " + albumNameComp);
             var fileNameComp = encodeURIComponent(file.name);
             var gsigninTokenComp = encodeURIComponent(jpress.gsignin.token);
             var response = await fetch(`/api/upload/${albumNameComp}/${fileNameComp}/${gsigninTokenComp}`, {

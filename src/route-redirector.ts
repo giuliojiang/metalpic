@@ -8,12 +8,16 @@ var redirectorHandler = function(): express.Express {
     let knownRoutes: Set<string> = new Set<string>();
     knownRoutes.add("metalpic-upload");
     knownRoutes.add("metalpic-hub");
+    knownRoutes.add("metalpic-album");
 
     var app = express();
 
-    app.get("/:routeName", async (req, res, next) => {
-        if (knownRoutes.has(req.params.routeName)) {
-            logger.info("Matched a known route " + req.params.routeName);
+    app.get("/*", async (req, res, next) => {
+        let fullRoute = req.params[0];
+        let fullRouteSplit = fullRoute.split("/");
+        let controllerName = fullRouteSplit[0];
+        if (knownRoutes.has(controllerName)) {
+            logger.info("Matched a known route " + controllerName);
             res.sendFile(path.resolve(__dirname, "..", "www", "index.html"));
         } else {
             logger.info("Not matched, calling next");

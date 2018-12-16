@@ -20,7 +20,7 @@ utils.stringNullOrEmpty = function(s) {
 }
 
 utils.isBot = function() {
-    return false;
+    return true;
     return /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
 }
 
