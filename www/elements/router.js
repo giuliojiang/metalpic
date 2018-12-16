@@ -22,9 +22,18 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
             event.stopPropagation();
             this.changeRouteTo(event.newRoute);
         }, true);
+
+        window.onpopstate = (event) => {
+            this.renderNewState(event.state);
+        };
     }
 
     changeRouteTo(newRoute) {
+        window.history.pushState(newRoute, newRoute, newRoute);
+        this.renderNewState(newRoute);
+    }
+
+    renderNewState(newRoute) {
         let splt = newRoute.split("/");
         this.currentRoute = splt[0];
         let remaining = [];
@@ -36,7 +45,6 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
         console.info("New route is " + this.currentRoute);
         console.info("New path is " + this.currentPath);
         this.draw();
-        // TODO change browser address
     }
 
     connectedCallback() {

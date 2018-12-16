@@ -37,7 +37,6 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
                 let obj = await response.json();
                 console.info(JSON.stringify(obj));
                 let status = obj.status;
-                // TODO when status is guest, show that the user doesn't have permissions
                 if (status == "valid") {
                     this.loginSuccess();
                     return;

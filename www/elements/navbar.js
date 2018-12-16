@@ -31,6 +31,7 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
             text-align: center;
             color: white;
             cursor: pointer;
+            text-decoration: none;
         }
         </style>
         `;
