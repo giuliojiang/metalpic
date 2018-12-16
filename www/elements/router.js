@@ -12,7 +12,7 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
         // Detect initial route
         let path = location.pathname;
         if (path == "/") {
-            this.changeRouteTo("metalpic-login");
+            this.changeRouteTo("metalpic-hub");
         } else {
             this.changeRouteTo(path.substr(1));
         }

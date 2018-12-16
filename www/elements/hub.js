@@ -16,8 +16,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     // Render =================================================================
 
     renderFirst() {
-        this.shadow = this.attachShadow({mode: "open"});
-        this.shadow.innerHTML = `
+        this.innerHTML = `
         <style>
         .container {
             padding: 10px;
@@ -25,7 +24,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
         </style>
         `;
         this.body = document.createElement("div");
-        this.shadow.appendChild(this.body);
+        this.appendChild(this.body);
         this.body.classList.add("container");
     }
 
@@ -35,14 +34,16 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
             body.removeChild(body.firstChild);
         }
 
+        let requiresLogin = document.createElement("metalpic-requires-login");
+
         let uploadLink = document.createElement("a");
         utils.addRouterLinkToElement(uploadLink, "metalpic-upload", this);
-        body.appendChild(uploadLink);
+        requiresLogin.appendChild(uploadLink);
         uploadLink.innerText = "Upload";
 
         if (this.data != null) {
             let albumsDiv = document.createElement("div");
-            body.appendChild(albumsDiv);
+            requiresLogin.appendChild(albumsDiv);
 
             for (let album of this.data.albums) {
                 let div = document.createElement("div");
@@ -58,12 +59,14 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
                 created.innerText = new Date(album.created).toString();
             }
         }
+
+        body.appendChild(requiresLogin);
     }
 
     // Private ================================================================
 
     async requestAlbums() {
-        let tokenComp = encodeURIComponent(jpress.gsignin.token);
+        let tokenComp = encodeURIComponent(localStorage.token);
         let response = await fetch(`/list/${tokenComp}`, {
             method: "GET"
         });
