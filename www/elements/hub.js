@@ -34,14 +34,17 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
             body.removeChild(body.firstChild);
         }
 
+        let requiresLogin = document.createElement("metalpic-requires-login");
+        requiresLogin.setAttribute("mustbeadmin", "false");
+
         let uploadLink = document.createElement("a");
         utils.addRouterLinkToElement(uploadLink, "metalpic-upload", this);
-        body.appendChild(uploadLink);
+        requiresLogin.appendChild(uploadLink);
         uploadLink.innerText = "Upload";
 
         if (this.data != null) {
             let albumsDiv = document.createElement("div");
-            body.appendChild(albumsDiv);
+            requiresLogin.appendChild(albumsDiv);
 
             for (let album of this.data.albums) {
                 let div = document.createElement("div");
@@ -58,6 +61,8 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
                 created.innerText = new Date(album.created).toString();
             }
         }
+
+        body.appendChild(requiresLogin);
     }
 
     // Private ================================================================

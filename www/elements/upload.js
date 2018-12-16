@@ -74,6 +74,7 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
         }
 
         let bodyInner = document.createElement("metalpic-requires-login");
+        bodyInner.setAttribute("mustbeadmin", "true");
 
         this.drawTitle(bodyInner);
         this.drawAlbumInput(bodyInner);

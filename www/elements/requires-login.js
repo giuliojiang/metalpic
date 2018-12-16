@@ -6,14 +6,24 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
     constructor() {
         super();
+        this.mustBeAdmin = true;
     }
 
     connectedCallback() {
         // Save the content of this div
-        console.info("requires login connected");
         this.html = this.innerHTML;
         this.innerHTML = "";
         this.checkToken();
+    }
+
+    static get observedAttributes() {
+        return ["mustbeadmin"];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name == "mustbeadmin") {
+            this.mustBeAdmin = (newValue == "true");
+        }
     }
 
     async checkToken() {
@@ -41,7 +51,11 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
                     this.loginSuccess();
                     return;
                 } else if (status == "guest") {
-                    this.userUnauthorized();
+                    if (this.mustBeAdmin) {
+                        this.userUnauthorized();
+                    } else {
+                        this.loginSuccess();
+                    }
                 } else {
                     this.doLogin()
                 }
@@ -61,13 +75,13 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
     loginSuccessCallback(event) {
         event.stopPropagation();
-        console.info("Received event for login success");
-        this.loginSuccess();
+        console.info("Received event for login success from login component, rechecking token");
+        this.checkToken();
     }
 
     userUnauthorized() {
         this.innerHTML = `
-            <p>Unauthorized</p>
+            <p>Unauthorized. This section is only accessible by admins</p>
         `;
     }
 
