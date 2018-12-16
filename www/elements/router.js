@@ -5,6 +5,7 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
 
     constructor() {
         super();
+        this.lastHtml = "";
 
         this.currentRoute = "";
         this.currentPath = "";
@@ -53,10 +54,16 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     }
 
     draw() {
-        this.innerHTML = `
-        <metalpic-navbar></metalpic-navbar>
-        <${this.currentRoute} routepath="${this.currentPath}"></${this.currentRoute}>
+        let newHtml = `
+            <metalpic-navbar></metalpic-navbar>
+            <${this.currentRoute} routepath="${this.currentPath}"></${this.currentRoute}>
         `;
+        if (newHtml != this.lastHtml) {
+            this.innerHTML = newHtml;
+            this.lastHtml = newHtml;
+        } else {
+            console.info("Skipping redraw, content is the same");
+        }
     }
 
 });

@@ -32,8 +32,16 @@ var albumHandler = function(): express.Express {
         // Get the pictures in the album
         let pictures = await mongoPic.getPicturesInAlbum(album._id);
         console.info("<><><> pictures in album are " + JSON.stringify(pictures));
-
-
+        let result: any = {
+        };
+        result.pictures = [];
+        for (let pic of pictures) {
+            result.pictures.push({
+                id: pic._id,
+                name: pic.name
+            });
+        }
+        res.send(JSON.stringify(result));
     });
 
     return app;

@@ -6,6 +6,7 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
     constructor() {
         super();
         this.albumName = null;
+        this.pictures = null; // {pictures: [{id, name}]}
     }
 
     connectedCallback() {
@@ -41,7 +42,8 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
             }
         });
         let responseObj = await response.json();
-        console.info("<><><> server returned " + JSON.stringify(responseObj));
+        this.pictures = responseObj;
+        this.render();
     }
 
     renderFirst() {
@@ -55,13 +57,34 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
     }
 
     render() {
-        if (this.albumName == null) {
-            let body = this.querySelector("[data-body]");
+        let body = this.querySelector("[data-body]");
+        if (this.pictures == null) {
             body.innerHTML = `
                 <p>Loading...</p>
             `;
         } else {
-            // TODO
+            body.innerHTML = `
+                <h2 data-albumname></h2>
+
+            `;
+
+            // Add album name
+            this.querySelector("[data-albumname]").innerText = this.albumName;
+
+            // Add pictures
+            let pictureTemplate = `
+                <div data-picture>
+                    <p data-picname></p>
+                </div>
+            `;
+
+            for (let pic of this.pictures.pictures) {
+                let div = document.createElement("div");
+                div.innerHTML = pictureTemplate;
+                div.querySelector("[data-picname]").innerText = pic.name;
+                body.innerHTML += div.innerHTML;
+            }
+            
         }
     }
 

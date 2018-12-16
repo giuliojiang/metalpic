@@ -56,7 +56,8 @@ var setAsReady = async function(picid: string): Promise<void> {
 var getPicturesInAlbum = async function(albumid: string): Promise<any[]> {
     let Pic = mongoose.getModel("Pic");
     let results = await Pic.find({
-        albumid: albumid
+        albumid: albumid,
+        ready: true
     }).exec();
     return results;
 }

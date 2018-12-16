@@ -4,17 +4,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
     // metalpic-login-success
 
     constructor() {
-
         super();
-
-        jpress.gsignin.callWhenLoginSuccessful(() => {
-            console.warn("gsign in successful, but not doing anything for now");
-            return;
-            var event = new Event("metalpic-routechange");
-            event.newRoute = "metalpic-hub";
-            this.dispatchEvent(event);
-            console.info("Dispatched routechange to hub");
-        });
     }
 
     connectedCallback() {
