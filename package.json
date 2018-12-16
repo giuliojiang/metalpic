@@ -20,6 +20,7 @@
   "homepage": "https://github.com/giuliojiang/metalpic#readme",
   "dependencies": {
     "aws-sdk": "^2.368.0",
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "google-auth-library": "^2.0.1",
     "lit-html": "^0.14.0",

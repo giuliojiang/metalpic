@@ -1,7 +1,6 @@
 import express = require("express");
 import * as loggerFactory from "./logger";
 import * as authentication from "./authentication";
-import * as conf from "./conf";
 
 const logger = loggerFactory.getLogger("route-checktoken");
 
@@ -19,8 +18,7 @@ var checktokenHandler = function(): express.Express {
                 }));
                 return;
             }
-            let allowedUsers = conf.get().allowedUsers;
-            let isAdminUser = allowedUsers.has(user.id);
+            let isAdminUser = authentication.isUserAdmin(user);
             if (isAdminUser) {
                 res.send(JSON.stringify({
                     status: "valid"

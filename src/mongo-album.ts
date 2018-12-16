@@ -72,7 +72,24 @@ var listAlbums = async function(showPrivate: boolean): Promise<any[]> {
     return existingAlbums;
 }
 
+// Get an album by name
+var getAlbumByName = async function(albumName: string): Promise<any> {
+    let Album = mongoosemodels.getModel("Album");
+
+    let albums = await Album.find({
+        name: albumName
+    }).exec();
+
+    if (albums.length == 0) {
+        return null;
+    } else {
+        let theAlbum = albums[0];
+        return theAlbum;
+    }
+}
+
 export {
     createAlbum,
-    listAlbums
+    listAlbums,
+    getAlbumByName
 }

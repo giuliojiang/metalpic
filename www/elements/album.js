@@ -28,9 +28,20 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
         this.requestAlbumData();
     }
 
-    requestAlbumData() {
+    async requestAlbumData() {
         console.info("Requesting album data " + this.albumName);
-        // TODO
+        let response = await fetch(`/api/album`, {
+            method: "POST",
+            body: JSON.stringify({
+                token: localStorage.token,
+                album: this.albumName
+            }),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        });
+        let responseObj = await response.json();
+        console.info("<><><> server returned " + JSON.stringify(responseObj));
     }
 
     renderFirst() {

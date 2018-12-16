@@ -1,9 +1,14 @@
 import { OAuth2Client } from "google-auth-library";
 import * as conf from "./conf";
 
+interface GoogleUser {
+    id: string;
+    name: string;
+}
+
 // ============================================================================
 
-var authenticate = async function(googleToken: string): Promise<{id: string, name: string}> {
+var authenticate = async function(googleToken: string): Promise<GoogleUser> {
     var client = new OAuth2Client(conf.get().googleClientId);
 
     var ticket;
@@ -28,4 +33,16 @@ var authenticate = async function(googleToken: string): Promise<{id: string, nam
 
 };
 
-export { authenticate }
+var isUserAdmin = function(user: GoogleUser): boolean {
+    if (user == null) {
+        return false;
+    }
+    let adminUsers = conf.get().allowedUsers;
+    return adminUsers.has(user.id);
+}
+
+export { 
+    GoogleUser,
+    authenticate,
+    isUserAdmin
+}
