@@ -62,8 +62,22 @@ var getPicturesInAlbum = async function(albumid: string): Promise<any[]> {
     return results;
 }
 
+// Returns null if the picture does not exist
+var getPicture = async function(pictureId: string): Promise<any> {
+    let Pic = mongoose.getModel("Pic");
+    let results = await Pic.find({
+        _id: pictureId
+    }).exec();
+    if (results.length == 0) {
+        return null;
+    } else {
+        return results[0];
+    }
+}
+
 export {
     insertPic,
     setAsReady,
-    getPicturesInAlbum
+    getPicturesInAlbum,
+    getPicture
 }

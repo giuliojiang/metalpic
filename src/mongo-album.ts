@@ -88,8 +88,23 @@ var getAlbumByName = async function(albumName: string): Promise<any> {
     }
 }
 
+var getAlbumById = async function(albumid: string): Promise<any> {
+    let Album = mongoosemodels.getModel("Album");
+
+    let albums = await Album.find({
+        _id: albumid
+    }).exec();
+
+    if (albums.length == 0) {
+        return null;
+    } else {
+        return albums[0];
+    }
+}
+
 export {
     createAlbum,
     listAlbums,
-    getAlbumByName
+    getAlbumByName,
+    getAlbumById
 }

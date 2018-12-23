@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as conf from "./conf";
 import * as loggerFactory from "./logger";
 import * as AWS from "aws-sdk";
+import { Readable } from "stream";
 
 const logger = loggerFactory.getLogger("s3");
 
@@ -51,6 +52,16 @@ var uploadFile = function(filepath: string, fileid: string): Promise<AWS.S3.Mana
     return uploadPromise;
 };
 
+var openFileAsStream = function(fileid: string): Readable {
+    var params = {
+        Bucket: conf.get().bucket,
+        Key: fileid
+    };
+    let result = s3.getObject(params).createReadStream();
+    return result;
+}
+
 export {
-    uploadFile
+    uploadFile,
+    openFileAsStream
 }

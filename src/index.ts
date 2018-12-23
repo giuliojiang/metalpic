@@ -7,6 +7,7 @@ import * as routeListAlbums from "./route-listalbums";
 import * as routeRedirector from "./route-redirector";
 import * as routeChecktoken from "./route-checktoken";
 import * as routeAlbum from "./route-album";
+import * as routeImage from "./route-image";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
@@ -20,6 +21,7 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     app.use("/api/checktoken", routeChecktoken.checktokenHandler());
     app.use("/list", routeListAlbums.listHandler());
     app.use("/api/album", routeAlbum.albumHandler());
+    app.use("/api/image", routeImage.imageHandler());
 
     return app;
 };

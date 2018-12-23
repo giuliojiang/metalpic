@@ -1,5 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import * as conf from "./conf";
+import express = require("express");
 
 interface GoogleUser {
     id: string;
@@ -33,6 +34,11 @@ var authenticate = async function(googleToken: string): Promise<GoogleUser> {
 
 };
 
+var authenticateFromHttpHeaders = function(req: express.Request): Promise<GoogleUser> {
+    let token: string = req.get("Metalpic-Auth-Token");
+    return authenticate(token);
+}
+
 var isUserAdmin = function(user: GoogleUser): boolean {
     if (user == null) {
         return false;
@@ -44,5 +50,6 @@ var isUserAdmin = function(user: GoogleUser): boolean {
 export { 
     GoogleUser,
     authenticate,
+    authenticateFromHttpHeaders,
     isUserAdmin
 }
