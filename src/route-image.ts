@@ -49,7 +49,7 @@ var imageHandler = function(): express.Express {
             }
 
             // Get the object from S3
-            let stream = s3.openFileAsStream(pic._id);
+            let stream = s3.openFileAsStream(pic._id.toString());
             stream.pipe(res);
 
         } catch (err) {

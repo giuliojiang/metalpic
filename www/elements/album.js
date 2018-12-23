@@ -72,17 +72,11 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
             this.querySelector("[data-albumname]").innerText = this.albumName;
 
             // Add pictures
-            let pictureTemplate = `
-                <div data-picture>
-                    <p data-picname></p>
-                </div>
-            `;
 
             for (let pic of this.pictures.pictures) {
-                let div = document.createElement("div");
-                div.innerHTML = pictureTemplate;
-                div.querySelector("[data-picname]").innerText = pic.name;
-                body.innerHTML += div.innerHTML;
+                let div = document.createElement("metalpic-picture-preview");
+                body.appendChild(div);
+                div.setAttribute("picid", pic.id);
             }
             
         }
