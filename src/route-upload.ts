@@ -10,6 +10,24 @@ import * as path from "path";
 
 const logger = loggerFactory.getLogger("route-upload");
 
+var createUploadDir = async function(): Promise<void> {
+    let uploadDir = path.resolve(conf.get().uploadDir);
+    let mkdirPromise = new Promise((resolve, reject) => {
+        fs.mkdir(uploadDir, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve()
+            }
+        })
+    });
+    try {
+        await mkdirPromise;
+    } catch (err) {
+        logger.error("Creating upload dir", err);
+    }
+}
+
 var uploadHandler = function(): express.Express {
     var app = express();
 
@@ -24,12 +42,17 @@ var uploadHandler = function(): express.Express {
             let allowedUsers = conf.get().allowedUsers;
             if (!allowedUsers.has(user.id)) {
                 logger.info("Unauthorized");
-                res.sendStatus(403);
+                res.sendStatus(403);``
                 return;
             }
 
-            // Create album if not exists
-            let albumid = await mongoalbum.createAlbum(req.params.album);
+            // Get album
+            let theAlbum = await mongoalbum.getAlbumByName(req.params.album);
+            if (theAlbum == null) {
+                res.sendStatus(400);
+                return;
+            }
+            let albumid = theAlbum._id.toString();
 
             // Insert into pic collection
             let picId = await mongopic.insertPic(req.params.name, albumid);
@@ -59,5 +82,6 @@ var uploadHandler = function(): express.Express {
 }
 
 export {
-    uploadHandler
+    uploadHandler,
+    createUploadDir
 }

@@ -7,6 +7,8 @@ import * as mongoPic from "./mongo-pic";
 
 const logger = loggerFactory.getLogger("route-album");
 
+// Get list of pictures in an album
+
 var albumHandler = function(): express.Express {
 
     let app = express();

@@ -8,17 +8,15 @@ import * as routeRedirector from "./route-redirector";
 import * as routeChecktoken from "./route-checktoken";
 import * as routeAlbum from "./route-album";
 import * as routeImage from "./route-image";
-import { RateLimiter } from "./rate-limiter";
+import * as routeAlbumCreate from "./route-album-create";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
     conf.set(config);
     await mongoose.connect();
-
-    let rateLimiter = new RateLimiter();
+    await routeUpload.createUploadDir();
 
     var app = express();
-    app.use(rateLimiter.createMiddlware());
     app.use("/", routeRedirector.redirectorHandler());
     app.use("/", express.static(path.resolve(__dirname, "..", "www")));
     app.use("/api/upload", routeUpload.uploadHandler());
@@ -26,6 +24,7 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     app.use("/list", routeListAlbums.listHandler());
     app.use("/api/album", routeAlbum.albumHandler());
     app.use("/api/image", routeImage.imageHandler());
+    app.use("/api/createalbum", routeAlbumCreate.createHandler());
 
     return app;
 };

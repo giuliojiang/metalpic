@@ -17,10 +17,8 @@ var redirectorHandler = function(): express.Express {
         let fullRouteSplit = fullRoute.split("/");
         let controllerName = fullRouteSplit[0];
         if (knownRoutes.has(controllerName)) {
-            logger.info("Matched a known route " + controllerName);
             res.sendFile(path.resolve(__dirname, "..", "www", "index.html"));
         } else {
-            logger.info("Not matched, calling next");
             next();
         }
     });

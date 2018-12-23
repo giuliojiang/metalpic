@@ -27,7 +27,7 @@ window.customElements.define("metalpic-upload-content", class extends HTMLElemen
             console.info("Uploading file " + file.name);
             var albumNameComp = encodeURIComponent(this.getAlbumName());
             var fileNameComp = encodeURIComponent(file.name);
-            var gsigninTokenComp = encodeURIComponent(jpress.gsignin.token);
+            var gsigninTokenComp = encodeURIComponent(localStorage.token);
             var response = await fetch(`/api/upload/${albumNameComp}/${fileNameComp}/${gsigninTokenComp}`, {
                 method: 'POST',
                 headers: {
@@ -44,6 +44,16 @@ window.customElements.define("metalpic-upload-content", class extends HTMLElemen
             if (utils.stringNullOrEmpty(this.getAlbumName())) {
                 window.alert("Album name cannot be empty");
             }
+            
+            // Create album
+            var headers = {};
+            headers[metalpic.TOKEN_HEADER] = localStorage.token;
+            var httpResponse = await fetch(`/api/createalbum/${encodeURIComponent(this.getAlbumName())}`, {
+                method: "POST",
+                headers: headers
+            });
+
+            // Upload all files
             for (var i = 0; i < this.files.length; i++) {
                 await upload(this.files[i]);
             }
