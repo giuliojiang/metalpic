@@ -8,13 +8,17 @@ import * as routeRedirector from "./route-redirector";
 import * as routeChecktoken from "./route-checktoken";
 import * as routeAlbum from "./route-album";
 import * as routeImage from "./route-image";
+import { RateLimiter } from "./rate-limiter";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
     conf.set(config);
     await mongoose.connect();
 
+    let rateLimiter = new RateLimiter();
+
     var app = express();
+    app.use(rateLimiter.createMiddlware());
     app.use("/", routeRedirector.redirectorHandler());
     app.use("/", express.static(path.resolve(__dirname, "..", "www")));
     app.use("/api/upload", routeUpload.uploadHandler());

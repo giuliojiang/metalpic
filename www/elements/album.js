@@ -41,6 +41,10 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
                 "Content-Type": "application/json; charset=utf-8"
             }
         });
+        if (response.status == 403) {
+            this.renderForbidden();
+            return;
+        }
         let responseObj = await response.json();
         this.pictures = responseObj;
         this.render();
@@ -80,6 +84,13 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
             }
             
         }
+    }
+
+    renderForbidden() {
+        let body = this.querySelector("[data-body]");
+        body.innerHTML = `
+            <p>Forbidden</p>
+        `;
     }
 
 });
