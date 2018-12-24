@@ -45,9 +45,16 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
     renderFirst() {
         this.innerHTML = `
             <style>
+                .metalpic-picture-preview-body {
+                    max-width: 100%;
+                    padding: 10px;
+                }
 
+                .metalpic-picture-preview-pic {
+                    max-width: 100%;
+                }
             </style>
-            <div data-body></div>
+            <div data-body class="metalpic-picture-preview-body"></div>
         `;
     }
 
@@ -56,6 +63,7 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
         let img = document.createElement("img");
         img.src = URL.createObjectURL(this._imgblob);
         body.appendChild(img);
+        img.classList.add("metalpic-picture-preview-pic");
     }
 
 })

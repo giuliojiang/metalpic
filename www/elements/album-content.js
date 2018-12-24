@@ -56,9 +56,23 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
     renderFirst() {
         this.innerHTML = `
             <style>
+                .metalpic-album-content-title {
+                    font-size: 22px;
+                }
 
+                .metalpic-album-content-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+
+                .metalpic-album-content-picture {
+                    max-width: 100%;
+                }
             </style>
-            <div data-body>
+            <div data-body class="metalpic-album-content-container">
             </div>
         `;
     }
@@ -74,7 +88,7 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
             `;
         } else {
             body.innerHTML = `
-                <h2 data-albumname></h2>
+                <div data-albumname class="metalpic-album-content-title"></div>
 
             `;
 
@@ -87,6 +101,7 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
                 let div = document.createElement("metalpic-picture-preview");
                 body.appendChild(div);
                 div.setAttribute("picid", pic.id);
+                div.classList.add("metalpic-album-content-picture");
             }
             
         }
