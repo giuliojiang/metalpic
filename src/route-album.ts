@@ -9,6 +9,16 @@ const logger = loggerFactory.getLogger("route-album");
 
 // Get list of pictures in an album
 
+// Response schema:
+// {
+//     pictures: [
+//         {
+//             id,
+//             name
+//         }
+//     ]
+// }
+
 var albumHandler = function(): express.Express {
 
     let app = express();

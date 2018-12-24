@@ -9,6 +9,7 @@ var redirectorHandler = function(): express.Express {
     knownRoutes.add("metalpic-upload");
     knownRoutes.add("metalpic-hub");
     knownRoutes.add("metalpic-album");
+    knownRoutes.add("metalpic-control-panel");
 
     var app = express();
 

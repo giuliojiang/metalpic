@@ -4,6 +4,14 @@
 // If there is no login token, displays the login button.
 window.customElements.define("metalpic-requires-login", class extends HTMLElement {
 
+    // Inputs:
+    // - mustbeadmin: "true" or "false"
+    // Inner content: content to be displayed if login succeeds
+    //
+    // NOTICE
+    // The google authentication button does not work with
+    // shadow root
+
     constructor() {
         super();
         this.mustBeAdmin = true;
