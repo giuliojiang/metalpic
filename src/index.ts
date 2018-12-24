@@ -9,12 +9,14 @@ import * as routeChecktoken from "./route-checktoken";
 import * as routeAlbum from "./route-album";
 import * as routeImage from "./route-image";
 import * as routeAlbumCreate from "./route-album-create";
+import { RouteAlbumEdit } from "./route-album-edit";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
     conf.set(config);
     await mongoose.connect();
     await routeUpload.createUploadDir();
+    let routeAlbumEdit = new RouteAlbumEdit;
 
     var app = express();
     app.use("/", routeRedirector.redirectorHandler());
@@ -25,6 +27,7 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     app.use("/api/album", routeAlbum.albumHandler());
     app.use("/api/image", routeImage.imageHandler());
     app.use("/api/createalbum", routeAlbumCreate.createHandler());
+    app.use("/api/editalbum", routeAlbumEdit.createHandler());
 
     return app;
 };

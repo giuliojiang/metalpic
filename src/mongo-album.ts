@@ -102,9 +102,31 @@ var getAlbumById = async function(albumid: string): Promise<any> {
     }
 }
 
+class AlbumNotFoundError extends Error { }
+
+var setVisibility = async function(albumname: string, newIsPublic: boolean): Promise<void> {
+    let Album = mongoosemodels.getModel("Album");
+
+    let albums = await Album.find({
+        name: albumname
+    }).exec();
+
+    if (albums.length == 0) {
+        throw new AlbumNotFoundError();
+    }
+
+    let theAlbum = albums[0];
+
+    theAlbum.public = newIsPublic;
+
+    await theAlbum.save();
+}
+
 export {
     createAlbum,
     listAlbums,
     getAlbumByName,
-    getAlbumById
+    getAlbumById,
+    setVisibility,
+    AlbumNotFoundError
 }

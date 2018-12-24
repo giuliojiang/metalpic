@@ -4,6 +4,8 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
 
     // Inputs:
     // - album: {name, public, created} object
+    // Output:
+    // - event control-panel-album-updated
 
     constructor() {
         super();
@@ -25,12 +27,6 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
         }
     }
 
-    visibilityButtonClick(event) {
-        event.stopPropagation();
-        // <><><> TODO
-        console.info("Visibility button clicked");
-    }
-
     renderFirst() {
         this.innerHTML = `
             <style>
@@ -49,6 +45,10 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
                 .metalpic-control-panel-album-name {
                     flex-grow: 1;
                     flex-shrink: 0;
+                }
+
+                .metalpic-control-panel-album-button {
+                    cursor: pointer;
                 }
             </style>
             <div data-body></div>
@@ -79,8 +79,34 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
         albumVisibilityButton.innerText = this.album.public
                                         ? "Make private"
                                         : "Make public";
-        albumVisibilityButton.addEventListener("click", this.visibilityButtonClick);
+        albumVisibilityButton.addEventListener("click", async (event) => {
+            event.stopPropagation();
+            
+            let albumName = encodeURIComponent(this.album.name);
+            let newVisibility;
+            if (this.album.public) {
+                newVisibility = "private";
+            } else {
+                newVisibility = "public";
+            }
+            newVisibility = encodeURIComponent(newVisibility);
+
+            let headers = {
+                "Metalpic-Auth-Token": localStorage.token
+            };
+            
+            let httpResponse = await fetch(`/api/editalbum/changevisibility/${albumName}/${newVisibility}`, {
+                method: "POST",
+                headers: headers
+            });
+            if (httpResponse.status != 200) {
+                alert("Error");
+            } else {
+                this.dispatchEvent(new CustomEvent("control-panel-album-updated"));
+            }
+        });
         albumVisibilityButton.classList.add("metalpic-control-panel-album-item");
+        albumVisibilityButton.classList.add("metalpic-control-panel-album-button");
     }
 
 });

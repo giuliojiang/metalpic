@@ -32,12 +32,22 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
     render() {
         let body = this.querySelector("[data-body]");
 
+        while (body.firstChild) {
+            body.removeChild(body.firstChild);
+        }
+
         for (let album of this.albumsData.albums) {
             // album: {name, public, created}
             let albumElement = document.createElement("metalpic-control-panel-album");
             body.appendChild(albumElement);
             albumElement.setAttribute("album", JSON.stringify(album));
         }
+
+        body.addEventListener("control-panel-album-updated", (event) => {
+            console.info("Album update received, reloading albums...");
+            event.stopPropagation();
+            this.loadAlbums();
+        }, true);
     }
 
 })
