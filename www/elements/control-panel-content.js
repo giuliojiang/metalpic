@@ -34,9 +34,9 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
 
         for (let album of this.albumsData.albums) {
             // album: {name, public, created}
-            let div = document.createElement("div");
-            body.appendChild(div);
-            div.innerText = album.name;
+            let albumElement = document.createElement("metalpic-control-panel-album");
+            body.appendChild(albumElement);
+            albumElement.setAttribute("album", JSON.stringify(album));
         }
     }
 
