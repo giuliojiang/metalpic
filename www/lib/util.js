@@ -39,3 +39,9 @@ utils.addRouterLinkToElement = function(elem, destination, parent) {
         });
     }
 }
+
+// Date to string
+// in yyyy. MM. dd format
+utils.dateToString = function(d) {
+    return d.toLocaleDateString('ko-KR');
+}

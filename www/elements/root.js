@@ -10,6 +10,13 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
 
     draw() {
         this.innerHTML = `
+            <style>
+                @import url('https://fonts.googleapis.com/css?family=Khula');
+
+                * {
+                    font-family: 'Khula', sans-serif;
+                }
+            </style>
             <metalpic-router></metalpic-router>
         `;
     }

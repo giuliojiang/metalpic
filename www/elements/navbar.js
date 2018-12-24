@@ -21,7 +21,6 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
         .metalpic-navbar {
             width: 100%;
             height: 90px;
-            background-color: #32324e;
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
@@ -30,12 +29,11 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
         }
 
         .metalpic-navbar-text {
-            font-family: "Impact";
             font-size: 40px;
             padding: 20px;
-            color: white;
             cursor: pointer;
             text-decoration: none;
+            color: black;
         }
         </style>
         `;
