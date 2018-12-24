@@ -31,6 +31,7 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
     }
 
     async loadPic() {
+        this.renderLoading();
         let headers = {};
         headers[metalpic.TOKEN_HEADER] = localStorage.token;
         let httpResponse = await fetch(`/api/image/${encodeURIComponent(this._picid)}`, {
@@ -59,11 +60,29 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
     }
 
     render() {
+        this.renderWithBody(body => {
+            let img = document.createElement("img");
+            img.src = URL.createObjectURL(this._imgblob);
+            body.appendChild(img);
+            img.classList.add("metalpic-picture-preview-pic");
+        })
+    }
+
+    renderLoading() {
+        this.renderWithBody(body => {
+            body.innerHTML = `
+                <div>Loading</div>
+            `;
+        })
+    }
+
+    // func(body)
+    renderWithBody(func) {
         let body = this.querySelector("[data-body]");
-        let img = document.createElement("img");
-        img.src = URL.createObjectURL(this._imgblob);
-        body.appendChild(img);
-        img.classList.add("metalpic-picture-preview-pic");
+        if (body != null) {
+            body.innerHTML = "";
+            func(body);
+        }
     }
 
 })
