@@ -77,7 +77,6 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
     loginSuccess() {
         // Display the saved HTML
-        console.info("Login is successful, displaying content");
         this.innerHTML = this.html;
     }
 

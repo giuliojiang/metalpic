@@ -22,13 +22,17 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
             width: 100%;
             height: 90px;
             background-color: #32324e;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-evenly;
+            align-items: center;
         }
 
         .metalpic-navbar-text {
             font-family: "Impact";
             font-size: 40px;
             padding: 20px;
-            text-align: center;
             color: white;
             cursor: pointer;
             text-decoration: none;
