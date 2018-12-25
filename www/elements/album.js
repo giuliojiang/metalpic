@@ -27,7 +27,7 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
 
     render() {
         this.innerHTML = `
-            <metalpic-requires-login mustbeadmin="false">
+            <metalpic-requires-login mustbeadmin="anon">
                 <metalpic-album-content routepath="${utils.quoteattr(this.routepath)}"></metalpic-album-content>
             </metalpic-requires-login>
         `;

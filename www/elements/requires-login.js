@@ -5,7 +5,10 @@
 window.customElements.define("metalpic-requires-login", class extends HTMLElement {
 
     // Inputs:
-    // - mustbeadmin: "true" or "false"
+    // - mustbeadmin: "true" or "false" or "anon"
+    //                "true" content displayed if user logged in and is admin
+    //                "false" content displayed if user logged in
+    //                "anon" content always displayed, but refreshed after login
     // Inner content: content to be displayed if login succeeds
     //
     // NOTICE
@@ -14,14 +17,28 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
     constructor() {
         super();
-        this.mustBeAdmin = true;
+        this.html = null; // string, contains HTML of inner elements set by parent
+        this.mustBeAdmin = "true";
+        this.loginStatus = "anon"; // "anon", "logged", "admin"
+        this.intervalHandle = null;
     }
 
     connectedCallback() {
         // Save the content of this div
         this.html = this.innerHTML;
         this.innerHTML = "";
-        this.checkToken();
+        this.renderFirst();
+        this.render();
+
+        // Start checktoken loop
+        this.intervalHandle = setInterval(() => {
+            this.checkToken();
+        }, 2 * 60 * 1000); // 2 minutes
+    }
+
+    disconnectedCallback() {
+        console.info("Disconnecting");
+        clearInterval(this.intervalHandle);
     }
 
     static get observedAttributes() {
@@ -30,78 +47,102 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name == "mustbeadmin") {
-            this.mustBeAdmin = (newValue == "true");
+            this.mustBeAdmin = newValue;
         }
     }
 
     async checkToken() {
         try {
-            if (localStorage.token == null) {
-                // No token
-                this.doLogin();
+            //  /api/checktoken/:token
+            let response = await fetch(`/api/checktoken/${encodeURIComponent(localStorage.token)}`, {
+                method: "GET"
+            });
+            let obj = await response.json();
+            console.info(JSON.stringify(obj));
+            let status = obj.status;
+            if (status == "valid") {
+                this.loginStatus = "admin";
+            } else if (status == "guest") {
+                this.loginStatus = "logged";
             } else {
-                let token = localStorage.token;
-                if (!utils.isString(token)) {
-                    localStorage.token = null;
-                    this.doLogin();
-                    return;
-                }
-
-                //  /api/checktoken/:token
-                let response = await fetch(`/api/checktoken/${encodeURIComponent(token)}`, {
-                    method: "GET"
-                });
-                console.info("Received response for /api/checktoken");
-                let obj = await response.json();
-                console.info(JSON.stringify(obj));
-                let status = obj.status;
-                if (status == "valid") {
-                    this.loginSuccess();
-                    return;
-                } else if (status == "guest") {
-                    if (this.mustBeAdmin) {
-                        this.userUnauthorized();
-                    } else {
-                        this.loginSuccess();
-                    }
-                } else {
-                    this.doLogin()
-                }
+                this.loginStatus = "anon";
             }
+
+            this.render();
+
         } catch (err) {
             console.warn(err);
-            this.doLogin();
             return;
         }
     }
 
-    loginSuccess() {
-        // Display the saved HTML
-        this.innerHTML = this.html;
-    }
-
-    loginSuccessCallback(event) {
-        event.stopPropagation();
-        console.info("Received event for login success from login component, rechecking token");
-        this.checkToken();
-    }
-
-    userUnauthorized() {
+    renderFirst() {
         this.innerHTML = `
-            <p>Unauthorized. This section is only accessible by admins</p>
+            <style>
+
+            </style>
+            <div data-requires-login-header></div>
+            <div data-requires-login-body></div>
         `;
-    }
+        let body = this.querySelector("[data-requires-login-header]");
 
-    doLogin() {
-        // Display login component and listen for the login success event.
-        this.removeEventListener("metalpic-login-success", this.loginSuccessCallback, true);
-        this.addEventListener("metalpic-login-success", this.loginSuccessCallback, true);
-        this.innerHTML = `
+        while (body.firstChild) {
+            body.removeChild(body.firstChild);
+        }
+        
+        body.innerHTML += `
             <metalpic-login></metalpic-login>
         `;
+
+        body.addEventListener("metalpic-login-success", (event) => {
+            event.stopPropagation();
+            this.checkToken();
+        }, true);
     }
 
     render() {
+        let body = this.querySelector("[data-requires-login-body]");
+        if (body == null) {
+            return;
+        }
+        body.innerHTML = '';
+
+        let displayContent = () => {
+            let div = document.createElement("div");
+            body.appendChild(div);
+            div.innerHTML = this.html;
+        }
+
+        let displayForbidden = () => {
+            let div = document.createElement("div");
+            body.appendChild(div);
+            div.innerText = "Forbidden";
+        }
+
+        let displayPleaseLogIn = () => {
+            let div = document.createElement("div");
+            body.appendChild(div);
+            div.innerText = "Please log in";
+        }
+
+        if (this.mustBeAdmin == "true") {
+            if (this.loginStatus == "admin") {
+                displayContent();
+            } else if (this.loginStatus == "logged") {
+                displayForbidden();
+            } else {
+                displayPleaseLogIn();
+            }
+        } else if (this.mustBeAdmin == "false") {
+            if (this.loginStatus == "anon") {
+                displayPleaseLogIn();
+            } else {
+                displayContent();
+            }
+        } else if (this.mustBeAdmin == "anon") {
+            displayContent();
+        }
+
     }
 
 });

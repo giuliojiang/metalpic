@@ -1,3 +1,4 @@
+console.info("Loaidng");
 
 window.customElements.define("metalpic-hub", class extends HTMLElement {
 
@@ -15,5 +16,3 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     }
 
 })
-
-console.info("metalpic-hub loaded");

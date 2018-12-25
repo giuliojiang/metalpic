@@ -4,6 +4,11 @@ import * as authentication from "./authentication";
 
 const logger = loggerFactory.getLogger("route-checktoken");
 
+// Response schema:
+// {
+//     status: "invalid" or "valid" or "guest"
+// }
+
 var checktokenHandler = function(): express.Express {
     var app = express();
 

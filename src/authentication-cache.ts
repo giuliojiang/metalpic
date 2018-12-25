@@ -14,8 +14,10 @@ export class AuthenticationCache {
 
     async getOrSet(token: string, setter: () => Promise<GoogleUser>): Promise<GoogleUser> {
         if (this.tokens.has(token)) {
+            logger.info("cache hit");
             return this.tokens.get(token);
         }
+        logger.info("cache miss");
 
         let user = await setter();
         if (user != null) {
