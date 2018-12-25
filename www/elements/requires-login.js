@@ -33,7 +33,7 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
         // Start checktoken loop
         this.intervalHandle = setInterval(() => {
             this.checkToken();
-        }, 20000); // 2 minutes
+        }, 2 * 60 * 1000); // 2 minutes
     }
 
     disconnectedCallback() {
@@ -100,6 +100,13 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
 
         body.addEventListener("metalpic-login-success", (event) => {
             event.stopPropagation();
+            this.checkToken();
+        }, true);
+
+        body.addEventListener("metalpic-login-logout", (event) => {
+            event.stopPropagation();
+            this.loginStatus = "anon";
+            this.render();
             this.checkToken();
         }, true);
     }

@@ -8,11 +8,11 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
     }
 
     connectedCallback() {
-        this.renderFirst();
         this.loadAlbums();
     }
 
     async loadAlbums() {
+        this.renderLoading();
         let httpResult = await fetch(`/list/${encodeURIComponent(localStorage.token)}`, {
             method: "GET"
         });
@@ -20,7 +20,7 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
         this.render();
     }
 
-    renderFirst() {
+    renderBase() {
         this.innerHTML = `
             <style>
 
@@ -30,11 +30,8 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
     }
 
     render() {
+        this.renderBase();
         let body = this.querySelector("[data-body]");
-
-        while (body.firstChild) {
-            body.removeChild(body.firstChild);
-        }
 
         for (let album of this.albumsData.albums) {
             // album: {name, public, created}
@@ -48,6 +45,17 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
             event.stopPropagation();
             this.loadAlbums();
         }, true);
+    }
+
+    renderLoading() {
+        this.renderBase();
+        let body = this.querySelector("[data-body]");
+
+        body.innerHTML = `
+            <div>
+                Loading
+            </div>
+        `;
     }
 
 })
