@@ -33,7 +33,7 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
         // Start checktoken loop
         this.intervalHandle = setInterval(() => {
             this.checkToken();
-        }, 2 * 60 * 1000); // 2 minutes
+        }, 20000); // 2 minutes
     }
 
     disconnectedCallback() {
@@ -71,6 +71,8 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
             this.render();
 
         } catch (err) {
+            this.loginStatus = "anon";
+            this.render();
             console.warn(err);
             return;
         }
@@ -79,7 +81,9 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
     renderFirst() {
         this.innerHTML = `
             <style>
-
+                .metalpic-requires-login-div {
+                    padding: 10px;
+                }
             </style>
             <div data-requires-login-header></div>
             <div data-requires-login-body></div>
@@ -117,12 +121,14 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
             let div = document.createElement("div");
             body.appendChild(div);
             div.innerText = "Forbidden";
+            div.classList.add("metalpic-requires-login-div");
         }
 
         let displayPleaseLogIn = () => {
             let div = document.createElement("div");
             body.appendChild(div);
             div.innerText = "Please log in";
+            div.classList.add("metalpic-requires-login-div");
         }
 
         if (this.mustBeAdmin == "true") {

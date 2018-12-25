@@ -2,6 +2,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
 
     // Output events:
     // metalpic-login-success
+    // metalpic-login-logout
 
     constructor() {
         super();
