@@ -59,11 +59,13 @@ window.customElements.define("metalpic-hub-content", class extends HTMLElement {
             body.removeChild(body.firstChild);
         }
 
-        let uploadLink = document.createElement("a");
-        utils.addRouterLinkToElement(uploadLink, "metalpic-upload", this);
-        body.appendChild(uploadLink);
-        uploadLink.innerText = "Upload";
-        uploadLink.classList.add("metalpic-hub-content-link");
+        // Add hub-buttons
+        let hubButtonsContainer = document.createElement("metalpic-requires-login");
+        hubButtonsContainer.setAttribute("mustbeadmin", "true");
+        let hubButtons = document.createElement("metalpic-hub-buttons");
+        hubButtonsContainer.appendChild(hubButtons);
+        hubButtonsContainer.setAttribute("donotdisplay", "true");
+        body.appendChild(hubButtonsContainer);
 
         if (this.data != null) {
             let albumsDiv = document.createElement("div");
@@ -97,14 +99,18 @@ window.customElements.define("metalpic-hub-content", class extends HTMLElement {
     // Private ================================================================
 
     async requestAlbums() {
-        let tokenComp = encodeURIComponent(localStorage.token);
-        let response = await fetch(`/list/${tokenComp}`, {
-            method: "GET"
-        });
-        let obj = await response.json();
-        // {"albums":[{"name":"faser234","public":false,"created":1544376564304},{"name":"faser","public":false,"created":1544363853532}]}
-        this.data = obj;
-        this.render();
+        try {
+            let tokenComp = encodeURIComponent(localStorage.token);
+            let response = await fetch(`/list/${tokenComp}`, {
+                method: "GET"
+            });
+            let obj = await response.json();
+            // {"albums":[{"name":"faser234","public":false,"created":1544376564304},{"name":"faser","public":false,"created":1544363853532}]}
+            this.data = obj;
+            this.render();
+        } catch (err) {
+            console.warn("Error", err);
+        }
     }
 
 });

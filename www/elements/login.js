@@ -1,8 +1,6 @@
-window.customElements.define("metalpic-login", class extends HTMLElement {
+console.info("Loading");
 
-    // Output events:
-    // metalpic-login-success
-    // metalpic-login-logout
+window.customElements.define("metalpic-login", class extends HTMLElement {
 
     constructor() {
         super();
@@ -19,21 +17,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
         this.innerHTML = `
         <style>
             .metalpic-login-signin {
-                padding: 30px;
-            }
-
-            .metalpic-login-container {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-            }
-
-            .metalpic-login-logout {
                 padding: 10px;
-                cursor: pointer;
             }
         </style>
         `;
@@ -55,28 +39,12 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
                     var id_token = googleUser.getAuthResponse().id_token;
                     console.info("Login success");
                     localStorage.token = id_token;
-                    this.dispatchEvent(new CustomEvent("metalpic-login-success"));
-                    console.info("Firing metalpic-login-success")
+                    location.reload();
                 }
             })
             console.info("Rendered gsignin button");
         });
 
-        let signOut = document.createElement("div");
-        this.body.appendChild(signOut);
-        signOut.addEventListener("click", (event) => {
-            event.stopPropagation();
-            localStorage.token = null;
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.info("Google signed out");
-            });
-            this.dispatchEvent(new CustomEvent("metalpic-login-logout"));
-        })
-        signOut.innerText = "Log Out";
-        signOut.classList.add("metalpic-login-logout");
 
     }
-})
-
-console.info("metalpic-login loaded");
+});
