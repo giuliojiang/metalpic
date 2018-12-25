@@ -53,6 +53,7 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
 
                 .metalpic-picture-preview-pic {
                     max-width: 100%;
+                    max-height: 90vh;
                 }
             </style>
             <div data-body class="metalpic-picture-preview-body"></div>

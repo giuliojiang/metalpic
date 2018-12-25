@@ -10,10 +10,12 @@ import * as routeAlbum from "./route-album";
 import * as routeImage from "./route-image";
 import * as routeAlbumCreate from "./route-album-create";
 import { RouteAlbumEdit } from "./route-album-edit";
+import * as authentication from "./authentication";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
     conf.set(config);
+    authentication.initialize();
     await mongoose.connect();
     await routeUpload.createUploadDir();
     let routeAlbumEdit = new RouteAlbumEdit;

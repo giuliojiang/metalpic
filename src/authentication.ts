@@ -1,37 +1,47 @@
 import { OAuth2Client } from "google-auth-library";
 import * as conf from "./conf";
 import express = require("express");
+import { AuthenticationCache } from "./authentication-cache";
 
 interface GoogleUser {
     id: string;
     name: string;
 }
 
-// ============================================================================
+var priv: {
+    authCache: AuthenticationCache
+} = {
+    authCache: null
+};
 
-var authenticate = async function(googleToken: string): Promise<GoogleUser> {
-    var client = new OAuth2Client(conf.get().googleClientId);
+var initialize = function() {
+    priv.authCache = new AuthenticationCache();
+}
 
-    var ticket;
-    try {
-        ticket = await client.verifyIdToken({
-            idToken: googleToken,
-            audience: conf.get().googleClientId
-        });
-    } catch (err) {
-        console.error("Authentication error: ", err);
-        return null;
-    }
+var authenticate = function(googleToken: string): Promise<GoogleUser> {
+    return priv.authCache.getOrSet(googleToken, async () => {
+        var client = new OAuth2Client(conf.get().googleClientId);
 
-    const payload = ticket.getPayload();
-    const userId = payload["sub"];
-    var username = payload["name"];
-
-    return {
-        id: userId,
-        name: username
-    };
-
+        var ticket;
+        try {
+            ticket = await client.verifyIdToken({
+                idToken: googleToken,
+                audience: conf.get().googleClientId
+            });
+        } catch (err) {
+            console.error("Authentication error: ", err);
+            return null;
+        }
+    
+        const payload = ticket.getPayload();
+        const userId = payload["sub"];
+        var username = payload["name"];
+    
+        return {
+            id: userId,
+            name: username
+        };
+    });
 };
 
 var authenticateFromHttpHeaders = function(req: express.Request): Promise<GoogleUser> {
@@ -48,6 +58,7 @@ var isUserAdmin = function(user: GoogleUser): boolean {
 }
 
 export { 
+    initialize,
     GoogleUser,
     authenticate,
     authenticateFromHttpHeaders,
