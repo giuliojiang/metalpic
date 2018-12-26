@@ -15,7 +15,7 @@ var initialize = function() {
     priv.authCache = new AuthenticationCache();
 }
 
-var authenticate = async function(username: string, pass: string): Promise<AuthToken> {
+var authenticate = function(username: string, pass: string): AuthToken {
     let config = conf.get();
     if (username === config.username && pass === config.password) {
         let token: AuthToken = cryptoRandomString(48);

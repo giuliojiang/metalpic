@@ -1,5 +1,4 @@
 interface Conf {
-    googleClientId: string,
     bucket: string,
     uploadDir: string,
     mongoUrl: string,

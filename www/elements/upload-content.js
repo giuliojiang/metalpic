@@ -27,11 +27,12 @@ window.customElements.define("metalpic-upload-content", class extends HTMLElemen
             console.info("Uploading file " + file.name);
             var albumNameComp = encodeURIComponent(this.getAlbumName());
             var fileNameComp = encodeURIComponent(file.name);
-            var gsigninTokenComp = encodeURIComponent(localStorage.token);
-            var response = await fetch(`/api/upload/${albumNameComp}/${fileNameComp}/${gsigninTokenComp}`, {
+
+            let headers = metalpic.createHeaders();
+
+            var response = await fetch(`/api/upload/${albumNameComp}/${fileNameComp}`, {
                 method: 'POST',
-                headers: {
-                },
+                headers: headers,
                 body: file // This is your file object
             });
         };
@@ -46,8 +47,7 @@ window.customElements.define("metalpic-upload-content", class extends HTMLElemen
             }
             
             // Create album
-            var headers = {};
-            headers[metalpic.TOKEN_HEADER] = localStorage.token;
+            let headers = metalpic.createHeaders();
             var httpResponse = await fetch(`/api/createalbum/${encodeURIComponent(this.getAlbumName())}`, {
                 method: "POST",
                 headers: headers

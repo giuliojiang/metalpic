@@ -11,6 +11,7 @@ import * as routeImage from "./route-image";
 import * as routeAlbumCreate from "./route-album-create";
 import { RouteAlbumEdit } from "./route-album-edit";
 import * as authentication from "./authentication";
+import { LoginRoute } from "./route-login";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
@@ -30,6 +31,7 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     app.use("/api/image", routeImage.imageHandler());
     app.use("/api/createalbum", routeAlbumCreate.createHandler());
     app.use("/api/editalbum", routeAlbumEdit.createHandler());
+    app.use("/api/login", LoginRoute.createMiddleware());
 
     return app;
 };

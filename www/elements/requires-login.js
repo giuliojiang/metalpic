@@ -4,9 +4,8 @@ console.info("Loading");
 window.customElements.define("metalpic-requires-login", class extends HTMLElement {
 
     // Inputs:
-    // - mustbeadmin: "true" or "false" or "anon"
+    // - mustbeadmin: "true" or "anon"
     //                "true" content displayed if user logged in and is admin
-    //                "false" content displayed if user logged in
     //                "anon" content always displayed, but refreshed after login
     // - donotdisplay: "false" or "true" controls visibility of login and logout
     //           buttons
@@ -21,7 +20,7 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
         this.html = null; // string, contains HTML of inner elements set by parent
         this.mustBeAdmin = "true";
         this.donotdisplay = "false";
-        this.loginStatus = "anon"; // "anon", "logged", "admin", "checking"
+        this.loginStatus = "anon"; // "anon", "admin", "checking"
         this.intervalHandle = null;
     }
 
@@ -59,16 +58,17 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
             //  /api/checktoken/:token
             this.loginStatus = "checking";
             this.render();
-            let response = await fetch(`/api/checktoken/${encodeURIComponent(localStorage.token)}`, {
-                method: "GET"
+
+            let headers = metalpic.createHeaders();
+
+            let response = await fetch(`/api/checktoken`, {
+                method: "GET",
+                headers: headers
             });
-            let obj = await response.json();
-            console.info(JSON.stringify(obj));
-            let status = obj.status;
-            if (status == "valid") {
+
+            console.info("Login status " + response.status);
+            if (response.status == 200) {
                 this.loginStatus = "admin";
-            } else if (status == "guest") {
-                this.loginStatus = "logged";
             } else {
                 this.loginStatus = "anon";
             }
@@ -133,14 +133,12 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
         }
 
         // logout button
-        if (this.loginStatus == "logged" || this.loginStatus == "admin") {
+        if (this.loginStatus == "admin") {
             let signOut = document.createElement("div");
             signOut.addEventListener("click", (event) => {
                 event.stopPropagation();
                 localStorage.token = null;
-                this.loginStatus = "anon";
-                this.render();
-                this.checkToken();
+                location.reload();
             })
             signOut.innerText = "Log Out";
             signOut.classList.add("metalpic-requires-login-logout");
@@ -191,20 +189,10 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
         if (this.mustBeAdmin == "true") {
             if (this.loginStatus == "admin") {
                 displayContent();
-            } else if (this.loginStatus == "logged") {
-                displayForbidden();
             } else if (this.loginStatus == "checking") {
                 displayChecking();
             } else {
                 displayPleaseLogIn();
-            }
-        } else if (this.mustBeAdmin == "false") {
-            if (this.loginStatus == "checking") {
-                displayChecking();
-            } if (this.loginStatus == "anon") {
-                displayPleaseLogIn();
-            } else {
-                displayContent();
             }
         } else if (this.mustBeAdmin == "anon") {
             displayContent();

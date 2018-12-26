@@ -1,8 +1,8 @@
 import * as mongoalbum from "./mongo-album";
 import express = require("express");
 import * as loggerFactory from "./logger";
-import * as authentication from "./authentication";
 import * as conf from "./conf";
+import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = loggerFactory.getLogger("route-listalbums");
 
@@ -19,13 +19,12 @@ var listHandler = function(): express.Express {
 
     var app = express();
 
-    app.get("/:token", async (req, res) => {
+    let authenticator = new HeaderAuthMiddleware();
+    app.use(authenticator.checkAuthentication());
+
+    app.get("/", async (req, res) => {
         try {
-            let token = req.params.token;
-            let user = await authentication.authenticate(token);
-            // Check user
-            let allowedUsers = conf.get().allowedUsers;
-            let isAdminUser = allowedUsers.has(user.id);
+            let isAdminUser: boolean = (req as any)["metalpic_authenticated"];
 
             // Query database
             let albums = await mongoalbum.listAlbums(isAdminUser);

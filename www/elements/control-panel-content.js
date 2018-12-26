@@ -13,8 +13,12 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
 
     async loadAlbums() {
         this.renderLoading();
-        let httpResult = await fetch(`/list/${encodeURIComponent(localStorage.token)}`, {
-            method: "GET"
+        
+        let headers = metalpic.createHeaders();
+
+        let httpResult = await fetch(`/list`, {
+            method: "GET",
+            headers: headers
         });
         this.albumsData = await httpResult.json();
         this.render();

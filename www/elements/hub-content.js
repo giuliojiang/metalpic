@@ -100,9 +100,11 @@ window.customElements.define("metalpic-hub-content", class extends HTMLElement {
 
     async requestAlbums() {
         try {
-            let tokenComp = encodeURIComponent(localStorage.token);
-            let response = await fetch(`/list/${tokenComp}`, {
-                method: "GET"
+            let headers = metalpic.createHeaders();
+
+            let response = await fetch(`/list`, {
+                method: "GET",
+                headers: headers
             });
             let obj = await response.json();
             // {"albums":[{"name":"faser234","public":false,"created":1544376564304},{"name":"faser","public":false,"created":1544363853532}]}

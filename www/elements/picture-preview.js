@@ -32,8 +32,8 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
 
     async loadPic() {
         this.renderLoading();
-        let headers = {};
-        headers[metalpic.TOKEN_HEADER] = localStorage.token;
+
+        let headers = metalpic.createHeaders();
         let httpResponse = await fetch(`/api/image/${encodeURIComponent(this._picid)}`, {
             method: "GET",
             headers: headers

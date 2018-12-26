@@ -1,6 +1,5 @@
 import { getLogger } from "./logger";
 import express = require("express");
-import * as authentication from "./authentication";
 import * as mongoAlbum from "./mongo-album";
 import { HeaderAuthMiddleware } from "./middleware-header-auth";
 

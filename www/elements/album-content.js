@@ -34,15 +34,14 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
 
     async requestAlbumData() {
         console.info("Requesting album data " + this.albumName);
+        let headers = metalpic.createHeaders();
+        headers["Content-Type"] = "application/json; charset=utf-8";
         let response = await fetch(`/api/album`, {
             method: "POST",
             body: JSON.stringify({
-                token: localStorage.token,
                 album: this.albumName
             }),
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            }
+            headers: headers
         });
         if (response.status == 403) {
             this.renderForbidden();

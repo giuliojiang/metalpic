@@ -1,20 +1,20 @@
 import * as loggerFactory from "./logger";
 import express = require("express");
-import * as authentication from "./authentication";
 import * as mongoPic from "./mongo-pic";
 import * as mongoAlbum from "./mongo-album";
 import * as s3 from "./s3";
+import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = loggerFactory.getLogger("route-image");
 
 var imageHandler = function(): express.Express {
     var app = express();
 
+    let authenticator = new HeaderAuthMiddleware();
+    app.use(authenticator.checkAuthentication());
+
     app.get("/:imageid", async (req: express.Request, res) => {
         try {
-            // Authenticate from headers
-            let user = await authentication.authenticateFromHttpHeaders(req);
-
             // Get picture information from database
             let pic = await mongoPic.getPicture(req.params.imageid);
             logger.info("Got pic: " + JSON.stringify(pic));
@@ -41,7 +41,8 @@ var imageHandler = function(): express.Express {
             }
 
             if (!album.public) {
-                if (!authentication.isUserAdmin(user)) {
+                let isUserAdmin: boolean = (req as any)["metalpic_authenticated"];
+                if (!isUserAdmin) {
                     logger.info("User is unauthorized to view this picture");
                     res.sendStatus(401);
                     return;

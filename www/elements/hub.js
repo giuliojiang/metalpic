@@ -8,7 +8,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = `
-            <metalpic-requires-login mustbeadmin="false">
+            <metalpic-requires-login mustbeadmin="anon">
                 <metalpic-hub-content>
                 </metalpic-hub-content>
             </metalpic-requires-login>

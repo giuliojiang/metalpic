@@ -91,14 +91,13 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
             }
             newVisibility = encodeURIComponent(newVisibility);
 
-            let headers = {
-                "Metalpic-Auth-Token": localStorage.token
-            };
+            let headers = metalpic.createHeaders();
             
             let httpResponse = await fetch(`/api/editalbum/changevisibility/${albumName}/${newVisibility}`, {
                 method: "POST",
                 headers: headers
             });
+            
             if (httpResponse.status != 200) {
                 alert("Error");
             } else {

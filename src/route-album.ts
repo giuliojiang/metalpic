@@ -2,7 +2,6 @@ import express = require("express");
 import * as loggerFactory from "./logger";
 import * as bodyParser from "body-parser";
 import * as mongoAlbum from "./mongo-album";
-import * as authentication from "./authentication";
 import * as mongoPic from "./mongo-pic";
 import { HeaderAuthMiddleware } from "./middleware-header-auth";
 

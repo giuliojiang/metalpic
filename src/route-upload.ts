@@ -7,6 +7,7 @@ import * as loggerFactory from "./logger";
 import * as mongoalbum from "./mongo-album";
 import * as s3 from "./s3";
 import * as path from "path";
+import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = loggerFactory.getLogger("route-upload");
 
@@ -31,20 +32,12 @@ var createUploadDir = async function(): Promise<void> {
 var uploadHandler = function(): express.Express {
     var app = express();
 
-    app.post("/:album/:name/:token", async (req, res) => {
+    let authenticator = new HeaderAuthMiddleware();
+    app.use(authenticator.requireAuthentication());
+
+    app.post("/:album/:name", async (req, res) => {
         try {
             logger.info("Album name is " + req.params.album);
-            var token = req.params.token;
-            logger.info("Token is " + token);
-            var user = await authentication.authenticate(token);
-
-            // Check user
-            let allowedUsers = conf.get().allowedUsers;
-            if (!allowedUsers.has(user.id)) {
-                logger.info("Unauthorized");
-                res.sendStatus(403);``
-                return;
-            }
 
             // Get album
             let theAlbum = await mongoalbum.getAlbumByName(req.params.album);
