@@ -34,7 +34,7 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
         this.renderLoading();
 
         let headers = metalpic.createHeaders();
-        let httpResponse = await fetch(`/api/image/${encodeURIComponent(this._picid)}`, {
+        let httpResponse = await fetch(`/api/image/${encodeURIComponent(this._picid)}/image.png`, {
             method: "GET",
             headers: headers
         });

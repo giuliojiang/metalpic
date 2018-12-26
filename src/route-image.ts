@@ -13,7 +13,7 @@ var imageHandler = function(): express.Express {
     let authenticator = new HeaderAuthMiddleware();
     app.use(authenticator.checkAuthentication());
 
-    app.get("/:imageid", async (req: express.Request, res) => {
+    app.get("/:imageid/image.png", async (req: express.Request, res) => {
         try {
             // Get picture information from database
             let pic = await mongoPic.getPicture(req.params.imageid);
