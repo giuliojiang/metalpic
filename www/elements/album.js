@@ -37,7 +37,7 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
     set routepath(routepath) {
         let routepathSplit = routepath.split("/");
         
-        this.albumName = routepathSplit[0];
+        this.albumName = decodeURIComponent(routepathSplit[0]);
 
         if (routepathSplit[1] != null) {
             this.page = parseInt(routepathSplit[1]);
