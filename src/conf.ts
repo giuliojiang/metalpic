@@ -3,7 +3,8 @@ interface Conf {
     bucket: string,
     uploadDir: string,
     mongoUrl: string,
-    allowedUsers: Set<string>
+    username: string,
+    password: string
 }
 
 var priv: {

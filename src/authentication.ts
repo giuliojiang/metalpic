@@ -1,12 +1,7 @@
-import { OAuth2Client } from "google-auth-library";
 import * as conf from "./conf";
 import express = require("express");
 import { AuthenticationCache } from "./authentication-cache";
-
-interface GoogleUser {
-    id: string;
-    name: string;
-}
+import cryptoRandomString = require("crypto-random-string");
 
 var priv: {
     authCache: AuthenticationCache
@@ -14,53 +9,34 @@ var priv: {
     authCache: null
 };
 
+export interface AuthToken extends String { }
+
 var initialize = function() {
     priv.authCache = new AuthenticationCache();
 }
 
-var authenticate = function(googleToken: string): Promise<GoogleUser> {
-    return priv.authCache.getOrSet(googleToken, async () => {
-        var client = new OAuth2Client(conf.get().googleClientId);
-
-        var ticket;
-        try {
-            ticket = await client.verifyIdToken({
-                idToken: googleToken,
-                audience: conf.get().googleClientId
-            });
-        } catch (err) {
-            console.error("Authentication error: ", err);
-            return null;
-        }
-    
-        const payload = ticket.getPayload();
-        const userId = payload["sub"];
-        var username = payload["name"];
-    
-        return {
-            id: userId,
-            name: username
-        };
-    });
+var authenticate = async function(username: string, pass: string): Promise<AuthToken> {
+    let config = conf.get();
+    if (username === config.username && pass === config.password) {
+        let token: AuthToken = cryptoRandomString(48);
+        priv.authCache.add(token);
+        return token;
+    } else {
+        return null;
+    }
 };
 
-var authenticateFromHttpHeaders = function(req: express.Request): Promise<GoogleUser> {
-    let token: string = req.get("Metalpic-Auth-Token");
-    return authenticate(token);
+var authenticateFromToken = function(token: AuthToken): boolean {
+    return priv.authCache.isValid(token);
 }
 
-var isUserAdmin = function(user: GoogleUser): boolean {
-    if (user == null) {
-        return false;
-    }
-    let adminUsers = conf.get().allowedUsers;
-    return adminUsers.has(user.id);
+var authenticateFromHttpHeaders = function(req: express.Request): boolean {
+    let token: string = req.get("Metalpic-Auth-Token");
+    return authenticateFromToken(token);
 }
 
 export { 
     initialize,
-    GoogleUser,
     authenticate,
-    authenticateFromHttpHeaders,
-    isUserAdmin
+    authenticateFromHttpHeaders
 }

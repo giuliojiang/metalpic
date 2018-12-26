@@ -5,8 +5,6 @@ import { getLogger } from "./logger";
 const logger = getLogger("middleware-header-auth");
 
 // Use in-header authentication token.
-// Injects "guser_user": authentication.GoogleUser and
-// "guser_admin": boolean into req for the next middleware
 
 export class HeaderAuthMiddleware {
 
@@ -16,13 +14,13 @@ export class HeaderAuthMiddleware {
 
         app.all("*", async (req, res, next) => {
             try {
-                let user = await authentication.authenticateFromHttpHeaders(req);
-                if (user == null) {
+                let authenticated: boolean = await authentication.authenticateFromHttpHeaders(req);
+                
+                if (!authenticated) {
                     res.sendStatus(403);
                     return;
                 }
-                (req as any)["guser_user"] = user;
-                (req as any)["guser_admin"] = authentication.isUserAdmin(user);
+
                 next();
             } catch (err) {
                 logger.error("Error", err);
@@ -33,6 +31,27 @@ export class HeaderAuthMiddleware {
 
         return app;
 
+    }
+
+    // injects a metalpic_authenticated property in req
+    checkAuthentication(): express.Express {
+        let app = express();
+
+        app.all("*", async (req, res, next) => {
+            try {
+                let authenticated: boolean = await authentication.authenticateFromHttpHeaders(req);
+
+                (req as any)["metalpic_authenticated"] = authenticated;
+
+                next();
+            } catch (err) {
+                logger.error("Error", err);
+                res.sendStatus(403);
+                return;
+            }
+        })
+
+        return app;
     }
 
 }

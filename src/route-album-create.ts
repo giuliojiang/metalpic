@@ -2,6 +2,7 @@ import { getLogger } from "./logger";
 import express = require("express");
 import * as authentication from "./authentication";
 import * as mongoAlbum from "./mongo-album";
+import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = getLogger("route-album-create");
 
@@ -17,16 +18,11 @@ var createHandler = function(): express.Express {
     
     let app = express();
 
+    let authMiddleware = new HeaderAuthMiddleware();
+    app.use(authMiddleware.requireAuthentication());
+
     app.post("/:albumname", async (req, res) => {
         try {
-            // Authenticate
-            let user = await authentication.authenticateFromHttpHeaders(req);
-
-            if (!authentication.isUserAdmin(user)) {
-                res.sendStatus(401);
-                return;
-            }
-
             // Create the album
             let albumid = await mongoAlbum.createAlbum(req.params.albumname);
 

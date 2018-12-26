@@ -4,6 +4,7 @@ import * as bodyParser from "body-parser";
 import * as mongoAlbum from "./mongo-album";
 import * as authentication from "./authentication";
 import * as mongoPic from "./mongo-pic";
+import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = loggerFactory.getLogger("route-album");
 
@@ -25,6 +26,9 @@ var albumHandler = function(): express.Express {
 
     app.use(bodyParser.json());
 
+    let authenticator = new HeaderAuthMiddleware();
+    app.use(authenticator.checkAuthentication());
+
     app.post("/", async (req, res) => {
         let body = req.body;
         let album = await mongoAlbum.getAlbumByName(body.album);
@@ -32,8 +36,8 @@ var albumHandler = function(): express.Express {
         // If album is private, user needs to be admin
         if (!album.public) {
             // Authenticate user
-            let user = await authentication.authenticate(body.token);
-            if (!authentication.isUserAdmin(user)) {
+            let authenticated: boolean = (req as any)["metalpic_authenticated"];
+            if (!authenticated) {
                 res.sendStatus(403);
                 return;
             }

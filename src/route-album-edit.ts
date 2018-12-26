@@ -16,12 +16,6 @@ export class RouteAlbumEdit {
 
         app.post("/changevisibility/:albumname/:newvisibility", async (req, res) => {
             try {
-                let isAdmin: boolean = (req as any).guser_admin;
-                if (!isAdmin) {
-                    res.sendStatus(403);
-                    return;
-                }
-
                 let newIsPublic: boolean;
                 if (req.params.newvisibility == "public") {
                     newIsPublic = true;
