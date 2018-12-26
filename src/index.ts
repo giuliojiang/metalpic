@@ -13,6 +13,7 @@ import { RouteAlbumEdit } from "./route-album-edit";
 import * as authentication from "./authentication";
 import { LoginRoute } from "./route-login";
 import * as s3 from "./s3";
+import helmet = require("helmet");
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
@@ -24,6 +25,9 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     await s3.initBucket();
 
     var app = express();
+
+    app.use(helmet());
+
     app.use("/", routeRedirector.redirectorHandler());
     app.use("/", express.static(path.resolve(__dirname, "..", "www")));
     app.use("/api/upload", routeUpload.uploadHandler());
