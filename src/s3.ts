@@ -13,15 +13,46 @@ AWS.config.update({region: 'eu-west-2'});
 
 // Create S3 service object
 var s3 = new AWS.S3({apiVersion: '2006-03-01'});
-                    
-// Call S3 to list current buckets
-s3.listBuckets(function(err: any, data: any) {
-    if (err) {
-       logger.error("Error", err);
-    } else {
-       logger.info("Bucket List: " + JSON.stringify(data.Buckets));
+
+var initBucket = async function(): Promise<void> {
+    // Call S3 to list current buckets
+    let buckets = await new Promise<any[]>((resolve, reject) => {
+        s3.listBuckets(function(err: any, data: any) {
+            if (err) {
+                reject(err);
+            } else {
+               logger.info("Bucket List: " + JSON.stringify(data.Buckets));
+               resolve(data.Buckets);
+            }
+        });
+    })
+
+    let bucketAlreadyExists = () => {
+        let targetBucket = conf.get().bucket;
+        for (let i = 0; i < buckets.length; i++) {
+            let b = buckets[i];
+            if (b.Name == targetBucket) {
+                return true;
+            }
+        }
+        return false;
     }
-});
+
+    if (!bucketAlreadyExists()) {
+        // Create bucket
+        await new Promise<void>((resolve, reject) => {
+            s3.createBucket({
+                Bucket: conf.get().bucket
+            }, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            })
+        });
+    }
+}
 
 // filepath: string, location of the file on the local disk
 // fileid: string, name of the file once uploaded on s3
@@ -68,5 +99,6 @@ var openFileAsStream = function(fileid: string): Readable {
 
 export {
     uploadFile,
-    openFileAsStream
+    openFileAsStream,
+    initBucket
 }

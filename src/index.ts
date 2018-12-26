@@ -12,6 +12,7 @@ import * as routeAlbumCreate from "./route-album-create";
 import { RouteAlbumEdit } from "./route-album-edit";
 import * as authentication from "./authentication";
 import { LoginRoute } from "./route-login";
+import * as s3 from "./s3";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
@@ -20,6 +21,7 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
     await mongoose.connect();
     await routeUpload.createUploadDir();
     let routeAlbumEdit = new RouteAlbumEdit;
+    await s3.initBucket();
 
     var app = express();
     app.use("/", routeRedirector.redirectorHandler());

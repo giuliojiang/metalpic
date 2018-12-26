@@ -13,19 +13,18 @@ const logger = loggerFactory.getLogger("route-upload");
 
 var createUploadDir = async function(): Promise<void> {
     let uploadDir = path.resolve(conf.get().uploadDir);
-    let mkdirPromise = new Promise((resolve, reject) => {
-        fs.mkdir(uploadDir, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve()
-            }
-        })
-    });
-    try {
+
+    if (!fs.existsSync(uploadDir)) {
+        let mkdirPromise = new Promise((resolve, reject) => {
+            fs.mkdir(uploadDir, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve()
+                }
+            })
+        });
         await mkdirPromise;
-    } catch (err) {
-        logger.error("Creating upload dir", err);
     }
 }
 
