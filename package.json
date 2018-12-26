@@ -1,6 +1,6 @@
 {
   "name": "metalpic",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Bare metal HTML web componenents based gallery and picture album",
   "main": "lib/index",
   "types": "lib/index",
