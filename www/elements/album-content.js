@@ -9,6 +9,7 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
     constructor() {
         super();
         this.albumName = null;
+        this.page = 0;
         this.pictures = null; // {pictures: [{id, name}]}
     }
 
@@ -28,7 +29,16 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
     }
 
     set routepath(routepath) {
-        this.albumName = routepath;
+        let routepathSplit = routepath.split("/");
+        
+        this.albumName = routepathSplit[0];
+
+        if (routepathSplit[1] != null) {
+            this.page = parseInt(routepathSplit[1]);
+        } else {
+            this.page = 0;
+        }
+
         this.requestAlbumData();
     }
 
@@ -39,7 +49,8 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
         let response = await fetch(`/api/album`, {
             method: "POST",
             body: JSON.stringify({
-                album: this.albumName
+                album: this.albumName,
+                page: this.page
             }),
             headers: headers
         });
@@ -96,13 +107,41 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
 
             // Add pictures
 
+            let picturesDiv = document.createElement("div");
+            picturesDiv.classList.add("metalpic-album-content-container");
+            body.appendChild(picturesDiv);
+
             for (let pic of this.pictures.pictures) {
                 let div = document.createElement("metalpic-picture-preview");
-                body.appendChild(div);
                 div.setAttribute("picid", pic.id);
                 div.classList.add("metalpic-album-content-picture");
+                picturesDiv.appendChild(div);
             }
-            
+
+            // No more pictures button
+            if (this.pictures == null || this.pictures.pictures.length == 0) {
+                let div = document.createElement("div");
+                div.innerText = "No pictures";
+                body.appendChild(div);
+            }
+
+            // Previous button
+            console.info("<><><> current page is " + this.page);
+            if (this.page > 0) {
+                let prevButton = document.createElement("a");
+                prevButton.innerText = "Previous page";
+                utils.addRouterLinkToElement(prevButton, `metalpic-album/${encodeURIComponent(this.albumName)}/${encodeURIComponent("" + (this.page - 1))}`, this);
+                body.appendChild(prevButton);
+            }
+
+            // Next button
+            if (!(this.pictures == null || this.pictures.pictures.length == 0)) {
+                let nextButton = document.createElement("a");
+                nextButton.innerText = "Next page";
+                utils.addRouterLinkToElement(nextButton, `metalpic-album/${encodeURIComponent(this.albumName)}/${encodeURIComponent("" + (this.page + 1))}`, this);
+                body.appendChild(nextButton);
+            }
+
         }
     }
 

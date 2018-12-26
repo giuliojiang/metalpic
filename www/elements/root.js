@@ -16,6 +16,11 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
                 * {
                     font-family: 'Khula', sans-serif;
                 }
+
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
             </style>
             <metalpic-router></metalpic-router>
         `;

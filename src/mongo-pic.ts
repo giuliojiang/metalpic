@@ -53,12 +53,24 @@ var setAsReady = async function(picid: string): Promise<void> {
 }
 
 // Get all the pictures in an album
-var getPicturesInAlbum = async function(albumid: string): Promise<any[]> {
+var getPicturesInAlbum = async function(albumid: string, skip: number, limit: number): Promise<any[]> {
+    if (limit == null) {
+        throw new Error("limit is null");
+    }
+    if (skip == null) {
+        throw new Error("skip is null");
+    }
+
     let Pic = mongoose.getModel("Pic");
-    let results = await Pic.find({
+
+    let results: any[] = await Pic.find({
         albumid: albumid,
         ready: true
-    }).exec();
+    }).sort("_id")
+    .skip(skip)
+    .limit(limit)
+    .exec();
+
     return results;
 }
 

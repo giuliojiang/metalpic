@@ -1,7 +1,7 @@
 window.customElements.define("metalpic-router", class extends HTMLElement {
 
     // Input events:
-    // - metalpic-routechange
+    // - metalpic-routechange: new route name, without the initial /
 
     constructor() {
         super();

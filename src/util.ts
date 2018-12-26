@@ -1,8 +1,8 @@
-var isString = function(s: any) {
+var isString = function(s: any): boolean {
     return typeof s === 'string' || s instanceof String;
 }
 
-var stringNullOrEmpty = function(s: any) {
+var stringNullOrEmpty = function(s: any): boolean {
     if (s == null) {
         return true;
     }
@@ -15,7 +15,7 @@ var stringNullOrEmpty = function(s: any) {
     return false;
 }
 
-var sleep = function(duration: number) {
+var sleep = function(duration: number): Promise<void> {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve();
@@ -23,8 +23,13 @@ var sleep = function(duration: number) {
     });
 }
 
+var isNumber = function(n: any): boolean {
+    return (typeof n === 'number') || n instanceof Number;
+}
+
 export {
     isString,
     stringNullOrEmpty,
-    sleep
+    sleep,
+    isNumber
 }
