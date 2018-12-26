@@ -40,11 +40,13 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
 
                 .metalpic-control-panel-album-item {
                     flex: 0 0 auto;
+                    padding: 10px;
                 }
 
                 .metalpic-control-panel-album-name {
                     flex-grow: 1;
                     flex-shrink: 0;
+                    padding: 10px;
                 }
 
                 .metalpic-control-panel-album-button {
@@ -97,7 +99,7 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
                 method: "POST",
                 headers: headers
             });
-            
+
             if (httpResponse.status != 200) {
                 alert("Error");
             } else {

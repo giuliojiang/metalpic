@@ -27,7 +27,6 @@ window.customElements.define("metalpic-control-panel-content", class extends HTM
     renderBase() {
         this.innerHTML = `
             <style>
-
             </style>
             <div data-body></div>
         `;

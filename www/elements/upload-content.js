@@ -57,6 +57,8 @@ window.customElements.define("metalpic-upload-content", class extends HTMLElemen
             for (var i = 0; i < this.files.length; i++) {
                 await upload(this.files[i]);
             }
+
+            alert("Upload completed");
         });
     }
 

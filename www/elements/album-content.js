@@ -11,11 +11,18 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
         this.albumName = null;
         this.page = 0;
         this.pictures = null; // {pictures: [{id, name}]}
+        this.picturesSerialized = null;
+        this.loaded = true; // set to false when component is unloaded
     }
 
     connectedCallback() {
         this.renderFirst();
-        this.render();
+        // this.render();
+    }
+
+    disconnectedCallback() {
+        this.loaded = false;
+        console.info("Disconnect");
     }
 
     static get observedAttributes() {
@@ -63,6 +70,35 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
         this.render();
     }
 
+    downloadPictures(picturesDiv) {
+
+        let jobsQueue = [];
+        for (let pic of this.pictures.pictures) {
+            jobsQueue.push(pic);
+        }
+
+        let downloader = async () => {
+            while (jobsQueue.length > 0) {
+                if (!this.loaded) {
+                    console.info("Unloaded, stopping download");
+                    return;
+                }
+
+                let pic = jobsQueue.shift();
+                let div = document.createElement("metalpic-picture-preview");
+                div.setAttribute("picid", pic.id);
+                div.classList.add("metalpic-album-content-picture");
+                picturesDiv.appendChild(div);
+            }
+        }
+
+        let DOWNLOAD_CONCURRENCY = 2;
+
+        for (let i = 0; i < DOWNLOAD_CONCURRENCY; i++) {
+            downloader();
+        }
+    }
+
     renderFirst() {
         this.innerHTML = `
             <style>
@@ -97,6 +133,15 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
                 <p>Loading...</p>
             `;
         } else {
+            let currentSerialized = JSON.stringify(this.pictures);
+            if (currentSerialized == this.picturesSerialized) {
+                // Skip
+                console.info("<><><> skip rendering");
+                return;
+            }
+            this.picturesSerialized = currentSerialized;
+            console.info("<><><> rendering with " + this.picturesSerialized);
+
             body.innerHTML = `
                 <div data-albumname class="metalpic-album-content-title"></div>
 
@@ -111,12 +156,7 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
             picturesDiv.classList.add("metalpic-album-content-container");
             body.appendChild(picturesDiv);
 
-            for (let pic of this.pictures.pictures) {
-                let div = document.createElement("metalpic-picture-preview");
-                div.setAttribute("picid", pic.id);
-                div.classList.add("metalpic-album-content-picture");
-                picturesDiv.appendChild(div);
-            }
+            this.downloadPictures(picturesDiv);
 
             // No more pictures button
             if (this.pictures == null || this.pictures.pictures.length == 0) {
@@ -126,7 +166,6 @@ window.customElements.define("metalpic-album-content", class extends HTMLElement
             }
 
             // Previous button
-            console.info("<><><> current page is " + this.page);
             if (this.page > 0) {
                 let prevButton = document.createElement("a");
                 prevButton.innerText = "Previous page";

@@ -159,15 +159,6 @@ window.customElements.define("metalpic-requires-login", class extends HTMLElemen
             div.innerHTML = this.html;
         }
 
-        let displayForbidden = () => {
-            if (this.donotdisplay == "false") {
-                let div = document.createElement("div");
-                body.appendChild(div);
-                div.innerText = "Forbidden";
-                div.classList.add("metalpic-requires-login-div");
-            }
-        }
-
         let displayPleaseLogIn = () => {
             if (this.donotdisplay == "false") {
                 let div = document.createElement("div");
