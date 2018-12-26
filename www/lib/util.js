@@ -64,3 +64,11 @@ utils.quoteattr = function(s, preserveCR) {
         .replace(/[\r\n]/g, preserveCR);
         ;
 }
+
+utils.sleep = function(duration) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve();
+        }, duration);
+    })
+}

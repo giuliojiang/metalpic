@@ -7,10 +7,24 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
     }
 
     connectedCallback() {
-        this.render();
+        this.checkToken();
     }
 
-    render() {
+    async checkToken() {
+        let headers = metalpic.createHeaders();
+        let httpResponse = await fetch(`/api/checktoken`, {
+            method: "GET",
+            headers: headers
+        });
+
+        if (httpResponse.status == 200) {
+            this.render();
+        } else {
+            this.renderEmpty();
+        }
+    }
+
+    renderFirst() {
         this.innerHTML = `
             <style>
                 .metalpic-hub-buttons-container {
@@ -36,6 +50,11 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
 
         let body = document.createElement("div");
         this.appendChild(body);
+        return body;
+    }
+
+    render() {
+        let body = this.renderFirst();
 
         let container = document.createElement("div");
         body.appendChild(container);
@@ -52,6 +71,10 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
         container.appendChild(panelLink);
         panelLink.innerText = "Control panel";
         panelLink.className = "metalpic-hub-buttons-item metalpic-hub-buttons-link";
+    }
+
+    renderEmpty() {
+        let body = this.renderFirst();
     }
 
 });

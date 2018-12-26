@@ -8,7 +8,20 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
 
     connectedCallback() {
         console.info("login connected");
-        this.render();
+        this.checkToken();
+    }
+
+    async checkToken() {
+        let headers = metalpic.createHeaders();
+        let httpResponse = await fetch(`/api/checktoken`, {
+            method: "GET",
+            headers: headers
+        });
+        if (httpResponse.status == 200) {
+            this.renderLogout();
+        } else {
+            this.renderLogin();
+        }
     }
 
     // Events =================================================================
@@ -47,7 +60,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
 
     // Render =================================================================
 
-    render() {
+    renderBase() {
         this.innerHTML = `
             <style>
                 .metalpic-login-input {
@@ -63,12 +76,22 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
                     justify-content: flex-start;
                     align-items: center;
                 }
+
+                .metalpic-login-logout {
+                    padding: 10px;
+                    cursor: pointer;
+                }
             </style>
         `;
 
         let body = document.createElement("div");
         body.classList.add("metalpic-login-container");
         this.appendChild(body);
+        return body;
+    }
+
+    renderLogin() {
+        let body = this.renderBase();
 
         this.usernameInput = document.createElement("input");
         this.usernameInput.setAttribute("type", "text");
@@ -83,5 +106,19 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
         this.addPasswordEvents(this.passwordInput);
         body.appendChild(this.passwordInput);
 
+    }
+
+    renderLogout() {
+        let body = this.renderBase();
+
+        let logoutButton = document.createElement("div");
+        logoutButton.innerText = "Logout";
+        logoutButton.classList.add("metalpic-login-logout");
+        logoutButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            localStorage.token = null;
+            location.reload();
+        })
+        body.appendChild(logoutButton);
     }
 });

@@ -55,7 +55,6 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
 
     draw() {
         let newHtml = `
-            <metalpic-navbar></metalpic-navbar>
             <${this.currentRoute} routepath="${this.currentPath}"></${this.currentRoute}>
         `;
         if (newHtml != this.lastHtml) {

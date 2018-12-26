@@ -22,6 +22,8 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
                     color: black;
                 }
             </style>
+            <metalpic-navbar></metalpic-navbar>
+            <metalpic-login></metalpic-login>
             <metalpic-router></metalpic-router>
         `;
     }
