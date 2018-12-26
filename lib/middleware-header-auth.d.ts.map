@@ -1,0 +1,1 @@
+{"version":3,"file":"middleware-header-auth.d.ts","sourceRoot":"","sources":["../src/middleware-header-auth.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,GAAG,QAAQ,SAAS,CAAC,CAAC;AAQpC,qBAAa,oBAAoB;IAE7B,qBAAqB,IAAI,OAAO,CAAC,OAAO;IA0BxC,mBAAmB,IAAI,OAAO,CAAC,OAAO;CAoBzC"}

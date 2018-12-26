@@ -1,0 +1,1 @@
+{"version":3,"file":"authentication-cache.d.ts","sourceRoot":"","sources":["../src/authentication-cache.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,kBAAkB,CAAC;AAM7C,qBAAa,mBAAmB;IAE5B,OAAO,CAAC,MAAM,CAAoD;;IAMlE,OAAO,CAAC,KAAK,EAAE,SAAS,GAAG,OAAO;IAQlC,GAAG,CAAC,KAAK,EAAE,SAAS,GAAG,IAAI;YAIb,SAAS;YAmBT,SAAS;CAM1B"}
