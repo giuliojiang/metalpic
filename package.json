@@ -6,7 +6,9 @@
   "types": "lib/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p ."
+    "build": "npm run build-server && npm run build-client",
+    "build-server": "tsc -p .",
+    "build-client": "cd www && webpack"
   },
   "repository": {
     "type": "git",
