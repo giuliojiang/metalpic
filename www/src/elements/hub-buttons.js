@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
@@ -7,25 +9,7 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
     }
 
     connectedCallback() {
-        this.checkToken();
-    }
-
-    async checkToken() {
-        let headers = metalpic.createHeaders();
-        let httpResponse = await fetch(`/api/checktoken`, {
-            method: "GET",
-            headers: headers
-        });
-
-        if (httpResponse.status == 200) {
-            this.render();
-        } else {
-            this.renderEmpty();
-        }
-    }
-
-    renderFirst() {
-        this.innerHTML = `
+        metalpicStyleCollector.register("hub-buttons.js", `
             <style>
                 .metalpic-hub-buttons-container {
                     display: flex;
@@ -46,7 +30,26 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
                     cursor: pointer;
                 }
             </style>
-        `;
+        `);
+        this.checkToken();
+    }
+
+    async checkToken() {
+        let headers = metalpic.createHeaders();
+        let httpResponse = await fetch(`/api/checktoken`, {
+            method: "GET",
+            headers: headers
+        });
+
+        if (httpResponse.status == 200) {
+            this.render();
+        } else {
+            this.renderEmpty();
+        }
+    }
+
+    renderFirst() {
+        this.innerHTML = ``;
 
         let body = document.createElement("div");
         this.appendChild(body);

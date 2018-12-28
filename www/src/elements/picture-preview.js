@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-picture-preview", class extends HTMLElement {
@@ -9,6 +11,19 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
     }
 
     connectedCallback() {
+        metalpicStyleCollector.register("picture-preview.js", `
+            <style>
+                .metalpic-picture-preview-body {
+                    max-width: 100%;
+                    padding: 10px;
+                }
+
+                .metalpic-picture-preview-pic {
+                    max-width: 100%;
+                    max-height: 90vh;
+                }
+            </style>
+        `);
         this.renderFirst();
     }
 
@@ -44,20 +59,11 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
     }
 
     renderFirst() {
-        this.innerHTML = `
-            <style>
-                .metalpic-picture-preview-body {
-                    max-width: 100%;
-                    padding: 10px;
-                }
-
-                .metalpic-picture-preview-pic {
-                    max-width: 100%;
-                    max-height: 90vh;
-                }
-            </style>
-            <div data-body class="metalpic-picture-preview-body"></div>
-        `;
+        this.innerHTML = '';
+        let body = document.createElement("div");
+        body.classList.add("metalpic-picture-preview-body");
+        this.appendChild(body);
+        return body;
     }
 
     render() {
@@ -79,11 +85,8 @@ window.customElements.define("metalpic-picture-preview", class extends HTMLEleme
 
     // func(body)
     renderWithBody(func) {
-        let body = this.querySelector("[data-body]");
-        if (body != null) {
-            body.innerHTML = "";
-            func(body);
-        }
+        let body = this.renderFirst();
+        func(body);
     }
 
 })

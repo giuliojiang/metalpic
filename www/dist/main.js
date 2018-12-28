@@ -2556,6 +2556,7 @@ function (_HTMLElement) {
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-control-panel",
 /*#__PURE__*/
@@ -2576,6 +2577,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("control-panel.js", "\n            <style>\n\n            </style>\n        ");
       this.loadAlbums();
     }
   }, {
@@ -2651,15 +2653,17 @@ function (_HTMLElement) {
   }, {
     key: "renderBase",
     value: function renderBase() {
-      this.innerHTML = "\n            <style>\n            </style>\n            <div data-body></div>\n        ";
+      this.innerHTML = '';
+      var body = document.createElement("div");
+      this.appendChild(body);
+      return body;
     }
   }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
-      this.renderBase();
-      var body = this.querySelector("[data-body]");
+      var body = this.renderBase();
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -2697,15 +2701,13 @@ function (_HTMLElement) {
   }, {
     key: "renderLoading",
     value: function renderLoading() {
-      this.renderBase();
-      var body = this.querySelector("[data-body]");
+      var body = this.renderBase();
       body.innerHTML = "\n            <div>\n                Loading\n            </div>\n        ";
     }
   }, {
     key: "renderForbidden",
     value: function renderForbidden() {
-      this.renderBase();
-      var body = this.querySelector("[data-body]");
+      var body = this.renderBase();
       body.innerHTML = "\n            <div>\n                Forbidden\n            </div>\n        ";
     }
   }]);
@@ -2713,6 +2715,7 @@ function (_HTMLElement) {
   return _class;
 }(wrapNativeSuper_default()(HTMLElement)));
 // CONCATENATED MODULE: ./src/elements/hub-buttons.js
+
 
 
 
@@ -2736,6 +2739,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("hub-buttons.js", "\n            <style>\n                .metalpic-hub-buttons-container {\n                    display: flex;\n                    flex-direction: row;\n                    flex-wrap: wrap;\n                    justify-content: flex-end;\n                    align-items: center;\n                    width: 100%;\n                }\n\n                .metalpic-hub-buttons-item {\n                    padding: 10px;\n                }\n\n                .metalpic-hub-buttons-link {\n                    text-decoration: none;\n                    color: black;\n                    cursor: pointer;\n                }\n            </style>\n        ");
       this.checkToken();
     }
   }, {
@@ -2782,7 +2786,7 @@ function (_HTMLElement) {
   }, {
     key: "renderFirst",
     value: function renderFirst() {
-      this.innerHTML = "\n            <style>\n                .metalpic-hub-buttons-container {\n                    display: flex;\n                    flex-direction: row;\n                    flex-wrap: wrap;\n                    justify-content: flex-end;\n                    align-items: center;\n                    width: 100%;\n                }\n\n                .metalpic-hub-buttons-item {\n                    padding: 10px;\n                }\n\n                .metalpic-hub-buttons-link {\n                    text-decoration: none;\n                    color: black;\n                    cursor: pointer;\n                }\n            </style>\n        ";
+      this.innerHTML = "";
       var body = document.createElement("div");
       this.appendChild(body);
       return body;
@@ -2823,6 +2827,7 @@ function (_HTMLElement) {
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-hub",
 /*#__PURE__*/
@@ -2843,6 +2848,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("hub.js", "\n            <style>\n                .metalpic-hub-content-body {\n                    padding: 10px;\n                }\n\n                .metalpic-hub-content-container {\n                    display: flex;\n                    flex-direction: row;\n                    flex-wrap: nowrap;\n                    justify-content: space-between;\n                    align-items: center;\n                }\n\n                .metalpic-hub-content-item-fixed {\n                    padding-left: 10px;\n                    flex-grow: 0;\n                    flex-shrink: 0;\n                }\n\n                .metalpic-hub-content-link {\n                    text-decoration: none;\n                    color: black;\n                }\n\n                .metalpic-hub-content-item-grow {\n                    flex-grow: 1;\n                    flex-shrink: 0;\n                }\n            </style>\n        ");
       this.data = null;
       this.render();
       this.requestAlbums();
@@ -2851,21 +2857,16 @@ function (_HTMLElement) {
   }, {
     key: "renderFirst",
     value: function renderFirst() {
-      this.innerHTML = "\n        <style>\n            .metalpic-hub-content-body {\n                padding: 10px;\n            }\n\n            .metalpic-hub-content-container {\n                display: flex;\n                flex-direction: row;\n                flex-wrap: nowrap;\n                justify-content: space-between;\n                align-items: center;\n            }\n\n            .metalpic-hub-content-item-fixed {\n                padding-left: 10px;\n                flex-grow: 0;\n                flex-shrink: 0;\n            }\n\n            .metalpic-hub-content-link {\n                text-decoration: none;\n                color: black;\n            }\n\n            .metalpic-hub-content-item-grow {\n                flex-grow: 1;\n                flex-shrink: 0;\n            }\n        </style>\n        ";
-      this.body = document.createElement("div");
-      this.appendChild(this.body);
-      this.body.classList.add("metalpic-hub-content-body");
+      this.innerHTML = "";
+      var body = document.createElement("div");
+      this.appendChild(body);
+      body.classList.add("metalpic-hub-content-body");
+      return body;
     }
   }, {
     key: "render",
     value: function render() {
-      this.renderFirst();
-      var body = this.body;
-
-      while (body.firstChild) {
-        body.removeChild(body.firstChild);
-      } // Add hub-buttons
-
+      var body = this.renderFirst(); // Add hub-buttons
 
       var hubButtons = document.createElement("metalpic-hub-buttons");
       body.appendChild(hubButtons);
@@ -2917,13 +2918,7 @@ function (_HTMLElement) {
   }, {
     key: "renderForbidden",
     value: function renderForbidden() {
-      this.renderFirst();
-      var body = this.body;
-
-      while (body.firstChild) {
-        body.removeChild(body.firstChild);
-      }
-
+      var body = this.renderFirst();
       body.innerHTML = "\n            <div>\n                Forbidden\n            </div>\n        ";
     } // Private ================================================================
 
@@ -3001,6 +2996,7 @@ function (_HTMLElement) {
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-login",
 /*#__PURE__*/
@@ -3016,7 +3012,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
-      console.info("login connected");
+      metalpicStyleCollector.register("login.js", "\n            <style>\n                .metalpic-login-input {\n                    padding: 10px;\n                    width: 200px;\n                    border: 0;\n                }\n\n                .metalpic-login-container {\n                    display: flex;\n                    flex-direction: row;\n                    flex-wrap: wrap;\n                    justify-content: flex-start;\n                    align-items: center;\n                }\n\n                .metalpic-login-logout {\n                    padding: 10px;\n                    cursor: pointer;\n                }\n            </style>\n        ");
       this.checkToken();
     }
   }, {
@@ -3136,7 +3132,7 @@ function (_HTMLElement) {
   }, {
     key: "renderBase",
     value: function renderBase() {
-      this.innerHTML = "\n            <style>\n                .metalpic-login-input {\n                    padding: 10px;\n                    width: 200px;\n                    border: 0;\n                }\n\n                .metalpic-login-container {\n                    display: flex;\n                    flex-direction: row;\n                    flex-wrap: wrap;\n                    justify-content: flex-start;\n                    align-items: center;\n                }\n\n                .metalpic-login-logout {\n                    padding: 10px;\n                    cursor: pointer;\n                }\n            </style>\n        ";
+      this.innerHTML = "";
       var body = document.createElement("div");
       body.classList.add("metalpic-login-container");
       this.appendChild(body);
@@ -3183,6 +3179,7 @@ function (_HTMLElement) {
 
 
 
+
 window.customElements.define("metalpic-navbar",
 /*#__PURE__*/
 function (_HTMLElement) {
@@ -3205,28 +3202,24 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("navbar.js", "\n        <style>\n        .metalpic-navbar {\n            width: 100%;\n            height: 90px;\n            display: flex;\n            flex-direction: row;\n            flex-wrap: nowrap;\n            justify-content: space-evenly;\n            align-items: center;\n        }\n\n        .metalpic-navbar-text {\n            font-size: 40px;\n            padding: 20px;\n            cursor: pointer;\n            text-decoration: none;\n            color: black;\n        }\n        </style>\n        ");
       this.render();
     } // Render =================================================================
 
   }, {
     key: "renderFirst",
     value: function renderFirst() {
-      this.shadow = this.attachShadow({
-        mode: 'open'
-      });
-      this.shadow.innerHTML = "\n        <style>\n        .metalpic-navbar {\n            width: 100%;\n            height: 90px;\n            display: flex;\n            flex-direction: row;\n            flex-wrap: nowrap;\n            justify-content: space-evenly;\n            align-items: center;\n        }\n\n        .metalpic-navbar-text {\n            font-size: 40px;\n            padding: 20px;\n            cursor: pointer;\n            text-decoration: none;\n            color: black;\n        }\n        </style>\n        ";
-      this.body = document.createElement("div");
-      this.shadow.appendChild(this.body);
+      this.innerHTML = '';
+      var body = document.createElement("div");
+      this.appendChild(body);
+      return body;
     }
   }, {
     key: "render",
     value: function render() {
-      while (this.body.firstChild) {
-        this.body.removeChild(this.body.firstChild);
-      }
-
+      var body = this.renderFirst();
       var container = document.createElement("div");
-      this.body.appendChild(container);
+      body.appendChild(container);
       container.classList.add("metalpic-navbar");
       var p = document.createElement("a");
       container.appendChild(p);
@@ -3238,8 +3231,8 @@ function (_HTMLElement) {
 
   return _class;
 }(wrapNativeSuper_default()(HTMLElement)));
-console.info("metalpic-navbar loaded");
 // CONCATENATED MODULE: ./src/elements/picture-preview.js
+
 
 
 
@@ -3268,6 +3261,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("picture-preview.js", "\n            <style>\n                .metalpic-picture-preview-body {\n                    max-width: 100%;\n                    padding: 10px;\n                }\n\n                .metalpic-picture-preview-pic {\n                    max-width: 100%;\n                    max-height: 90vh;\n                }\n            </style>\n        ");
       this.renderFirst();
     }
   }, {
@@ -3323,7 +3317,11 @@ function (_HTMLElement) {
   }, {
     key: "renderFirst",
     value: function renderFirst() {
-      this.innerHTML = "\n            <style>\n                .metalpic-picture-preview-body {\n                    max-width: 100%;\n                    padding: 10px;\n                }\n\n                .metalpic-picture-preview-pic {\n                    max-width: 100%;\n                    max-height: 90vh;\n                }\n            </style>\n            <div data-body class=\"metalpic-picture-preview-body\"></div>\n        ";
+      this.innerHTML = '';
+      var body = document.createElement("div");
+      body.classList.add("metalpic-picture-preview-body");
+      this.appendChild(body);
+      return body;
     }
   }, {
     key: "render",
@@ -3348,12 +3346,8 @@ function (_HTMLElement) {
   }, {
     key: "renderWithBody",
     value: function renderWithBody(func) {
-      var body = this.querySelector("[data-body]");
-
-      if (body != null) {
-        body.innerHTML = "";
-        func(body);
-      }
+      var body = this.renderFirst();
+      func(body);
     }
   }, {
     key: "picid",
@@ -3378,6 +3372,7 @@ function (_HTMLElement) {
 
 
 
+
 window.customElements.define("metalpic-root",
 /*#__PURE__*/
 function (_HTMLElement) {
@@ -3392,12 +3387,13 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
+      metalpicStyleCollector.register("root.js", "\n            <style>\n                @import url('https://fonts.googleapis.com/css?family=Khula');\n\n                * {\n                    font-family: 'Khula', sans-serif;\n                }\n\n                a {\n                    text-decoration: none;\n                    color: black;\n                }\n            </style>\n        ");
       this.draw();
     }
   }, {
     key: "draw",
     value: function draw() {
-      this.innerHTML = "\n            <style>\n                @import url('https://fonts.googleapis.com/css?family=Khula');\n\n                * {\n                    font-family: 'Khula', sans-serif;\n                }\n\n                a {\n                    text-decoration: none;\n                    color: black;\n                }\n            </style>\n            <metalpic-navbar></metalpic-navbar>\n            <metalpic-login></metalpic-login>\n            <metalpic-router></metalpic-router>\n        ";
+      this.innerHTML = "\n            <metalpic-navbar></metalpic-navbar>\n            <metalpic-login></metalpic-login>\n            <metalpic-router></metalpic-router>\n        ";
     }
   }]);
 
@@ -3443,10 +3439,6 @@ function (_HTMLElement) {
       _this.changeRouteTo(event.newRoute);
     }, true);
 
-    window.onpopstate = function (event) {
-      _this.renderNewState(event.state);
-    };
-
     return _this;
   }
 
@@ -3454,7 +3446,6 @@ function (_HTMLElement) {
     key: "changeRouteTo",
     value: function changeRouteTo(newRoute) {
       console.info("changeRouteTo: " + newRoute);
-      window.history.pushState(newRoute, newRoute, "/" + newRoute);
       this.renderNewState(newRoute);
     }
   }, {
@@ -3505,6 +3496,7 @@ console.info("metalpic-router loaded");
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-upload",
 /*#__PURE__*/
@@ -3525,7 +3517,7 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "connectedCallback",
     value: function connectedCallback() {
-      this.renderFirst();
+      metalpicStyleCollector.register("upload.js", "\n            <style>\n                .container {\n                    padding-left: 10px;\n                    padding-top: 10px;\n                }\n            </style>\n        ");
       this.render();
     }
   }, {
@@ -3671,12 +3663,15 @@ function (_HTMLElement) {
   }, {
     key: "renderFirst",
     value: function renderFirst() {
-      this.innerHTML = "\n        <style>\n            .container {\n                padding-left: 10px;\n                padding-top: 10px;\n            }\n        </style>\n        <div data-body></div>\n        ";
+      this.innerHTML = '';
+      var body = document.createElement("div");
+      this.appendChild(body);
+      return body;
     }
   }, {
     key: "render",
     value: function render() {
-      var body = this.querySelector("[data-body]"); // Clear the body
+      var body = this.renderFirst(); // Clear the body
 
       while (body.firstChild) {
         body.removeChild(body.firstChild);

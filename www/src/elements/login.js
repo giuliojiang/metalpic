@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-login", class extends HTMLElement {
@@ -7,7 +9,28 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
     }
 
     connectedCallback() {
-        console.info("login connected");
+        metalpicStyleCollector.register("login.js", `
+            <style>
+                .metalpic-login-input {
+                    padding: 10px;
+                    width: 200px;
+                    border: 0;
+                }
+
+                .metalpic-login-container {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+
+                .metalpic-login-logout {
+                    padding: 10px;
+                    cursor: pointer;
+                }
+            </style>
+        `);
         this.checkToken();
     }
 
@@ -61,28 +84,7 @@ window.customElements.define("metalpic-login", class extends HTMLElement {
     // Render =================================================================
 
     renderBase() {
-        this.innerHTML = `
-            <style>
-                .metalpic-login-input {
-                    padding: 10px;
-                    width: 200px;
-                    border: 0;
-                }
-
-                .metalpic-login-container {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: flex-start;
-                    align-items: center;
-                }
-
-                .metalpic-login-logout {
-                    padding: 10px;
-                    cursor: pointer;
-                }
-            </style>
-        `;
+        this.innerHTML = ``;
 
         let body = document.createElement("div");
         body.classList.add("metalpic-login-container");

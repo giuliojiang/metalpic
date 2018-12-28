@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 window.customElements.define("metalpic-root", class extends HTMLElement {
 
     constructor() {
@@ -5,11 +7,7 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
     }
 
     connectedCallback() {
-        this.draw();
-    }
-
-    draw() {
-        this.innerHTML = `
+        metalpicStyleCollector.register("root.js", `
             <style>
                 @import url('https://fonts.googleapis.com/css?family=Khula');
 
@@ -22,6 +20,12 @@ window.customElements.define("metalpic-root", class extends HTMLElement {
                     color: black;
                 }
             </style>
+        `);
+        this.draw();
+    }
+
+    draw() {
+        this.innerHTML = `
             <metalpic-navbar></metalpic-navbar>
             <metalpic-login></metalpic-login>
             <metalpic-router></metalpic-router>
