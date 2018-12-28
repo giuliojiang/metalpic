@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-upload", class extends HTMLElement {
@@ -11,7 +13,14 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
     // Events =================================================================
 
     connectedCallback() {
-        this.renderFirst();
+        metalpicStyleCollector.register("upload.js", `
+            <style>
+                .container {
+                    padding-left: 10px;
+                    padding-top: 10px;
+                }
+            </style>
+        `);
         this.render();
     }
 
@@ -65,19 +74,14 @@ window.customElements.define("metalpic-upload", class extends HTMLElement {
     // Draw ===================================================================
 
     renderFirst() {
-        this.innerHTML = `
-        <style>
-            .container {
-                padding-left: 10px;
-                padding-top: 10px;
-            }
-        </style>
-        <div data-body></div>
-        `;
+        this.innerHTML = '';
+        let body = document.createElement("div");
+        this.appendChild(body);
+        return body;
     }
 
     render() {
-        let body = this.querySelector("[data-body]");
+        let body = this.renderFirst();
 
         // Clear the body
         while (body.firstChild) {

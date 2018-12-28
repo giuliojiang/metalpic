@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-hub", class extends HTMLElement {
@@ -8,6 +10,37 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     }
 
     connectedCallback() {
+        metalpicStyleCollector.register("hub.js", `
+            <style>
+                .metalpic-hub-content-body {
+                    padding: 10px;
+                }
+
+                .metalpic-hub-content-container {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .metalpic-hub-content-item-fixed {
+                    padding-left: 10px;
+                    flex-grow: 0;
+                    flex-shrink: 0;
+                }
+
+                .metalpic-hub-content-link {
+                    text-decoration: none;
+                    color: black;
+                }
+
+                .metalpic-hub-content-item-grow {
+                    flex-grow: 1;
+                    flex-shrink: 0;
+                }
+            </style>
+        `);
         this.data = null;
         this.render();
         this.requestAlbums();
@@ -16,48 +49,15 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     // Render =================================================================
 
     renderFirst() {
-        this.innerHTML = `
-        <style>
-            .metalpic-hub-content-body {
-                padding: 10px;
-            }
-
-            .metalpic-hub-content-container {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .metalpic-hub-content-item-fixed {
-                padding-left: 10px;
-                flex-grow: 0;
-                flex-shrink: 0;
-            }
-
-            .metalpic-hub-content-link {
-                text-decoration: none;
-                color: black;
-            }
-
-            .metalpic-hub-content-item-grow {
-                flex-grow: 1;
-                flex-shrink: 0;
-            }
-        </style>
-        `;
-        this.body = document.createElement("div");
-        this.appendChild(this.body);
-        this.body.classList.add("metalpic-hub-content-body");
+        this.innerHTML = ``;
+        let body = document.createElement("div");
+        this.appendChild(body);
+        body.classList.add("metalpic-hub-content-body");
+        return body;
     }
 
     render() {
-        this.renderFirst();
-        let body = this.body;
-        while (body.firstChild) {
-            body.removeChild(body.firstChild);
-        }
+        let body = this.renderFirst();
 
         // Add hub-buttons
         let hubButtons = document.createElement("metalpic-hub-buttons");
@@ -93,11 +93,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     }
 
     renderForbidden() {
-        this.renderFirst();
-        let body = this.body;
-        while (body.firstChild) {
-            body.removeChild(body.firstChild);
-        }
+        let body = this.renderFirst();
 
         body.innerHTML = `
             <div>

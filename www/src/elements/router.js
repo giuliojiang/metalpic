@@ -24,14 +24,10 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
             this.changeRouteTo(event.newRoute);
         }, true);
 
-        window.onpopstate = (event) => {
-            this.renderNewState(event.state);
-        };
     }
 
     changeRouteTo(newRoute) {
         console.info("changeRouteTo: " + newRoute);
-        window.history.pushState(newRoute, newRoute, "/" + newRoute);
         this.renderNewState(newRoute);
     }
 

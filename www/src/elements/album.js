@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-album", class extends HTMLElement {
@@ -15,8 +17,27 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
     }
 
     connectedCallback() {
-        this.renderFirst();
-        // this.render();
+        metalpicStyleCollector.register("album.js", `
+            <style>
+                .metalpic-album-content-title {
+                    font-size: 22px;
+                }
+
+                .metalpic-album-content-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+
+                .metalpic-album-content-picture {
+                    max-width: 100%;
+                }
+            </style>
+            <div data-body class="metalpic-album-content-container">
+            </div>
+        `);
     }
 
     disconnectedCallback() {
@@ -98,35 +119,13 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
         }
     }
 
-    renderFirst() {
-        this.innerHTML = `
-            <style>
-                .metalpic-album-content-title {
-                    font-size: 22px;
-                }
-
-                .metalpic-album-content-container {
-                    display: flex;
-                    flex-direction: column;
-                    flex-wrap: nowrap;
-                    justify-content: flex-start;
-                    align-items: center;
-                }
-
-                .metalpic-album-content-picture {
-                    max-width: 100%;
-                }
-            </style>
-            <div data-body class="metalpic-album-content-container">
-            </div>
-        `;
-    }
-
     render() {
-        let body = this.querySelector("[data-body]");
-        if (body == null) {
-            return;
-        }
+        this.innerHTML = ``;
+
+        let body = document.createElement("div");
+        body.classList.add("metalpic-album-content-container");
+        this.appendChild(body);
+
         if (this.pictures == null) {
             body.innerHTML = `
                 <p>Loading...</p>

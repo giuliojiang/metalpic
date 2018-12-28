@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 window.customElements.define("metalpic-navbar", class extends HTMLElement {
 
     // Output events:
@@ -9,14 +11,7 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
     }
 
     connectedCallback() {
-        this.render();
-    }
-
-    // Render =================================================================
-
-    renderFirst() {
-        this.shadow = this.attachShadow({mode: 'open'});
-        this.shadow.innerHTML = `
+        metalpicStyleCollector.register("navbar.js", `
         <style>
         .metalpic-navbar {
             width: 100%;
@@ -36,17 +31,23 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
             color: black;
         }
         </style>
-        `;
-        this.body = document.createElement("div");
-        this.shadow.appendChild(this.body);
+        `);
+        this.render();
+    }
+
+    // Render =================================================================
+
+    renderFirst() {
+        this.innerHTML = '';
+        let body = document.createElement("div");
+        this.appendChild(body);
+        return body;
     }
 
     render() {
-        while (this.body.firstChild) {
-            this.body.removeChild(this.body.firstChild);
-        }
+        let body = this.renderFirst();
         let container = document.createElement("div");
-        this.body.appendChild(container);
+        body.appendChild(container);
         container.classList.add("metalpic-navbar");
 
         let p = document.createElement("a");
@@ -57,5 +58,3 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
     }
 
 });
-
-console.info("metalpic-navbar loaded");

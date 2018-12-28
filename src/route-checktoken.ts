@@ -1,21 +1,28 @@
 import express = require("express");
 import * as loggerFactory from "./logger";
-import { HeaderAuthMiddleware } from "./middleware-header-auth";
+import * as authentication from "./authentication";
 
 const logger = loggerFactory.getLogger("route-checktoken");
 
 // Response schema:
-// 403 if invalid
-// 200 if valid
+// {
+//     valid: boolean
+// }
 
 var checktokenHandler = function(): express.Express {
     var app = express();
 
-    let authenticator = new HeaderAuthMiddleware();
-    app.use(authenticator.requireAuthentication());
-
-    app.get("/", async (req, res) => {
-        res.sendStatus(200);
+    app.post("/", async (req, res) => {
+        try {
+            let authenticated = await authentication.authenticateFromHttpHeaders(req);
+            res.status(200);
+            res.send(JSON.stringify({
+                valid: authenticated
+            }));
+        } catch (err) {
+            logger.error("Error", err);
+            res.sendStatus(500);
+        }
     });
 
     return app;

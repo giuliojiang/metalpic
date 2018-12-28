@@ -1,3 +1,6 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+import { CheckToken } from "../lib/check-token";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-control-panel", class extends HTMLElement {
@@ -8,20 +11,19 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
     }
 
     connectedCallback() {
+        metalpicStyleCollector.register("control-panel.js", `
+            <style>
+
+            </style>
+        `);
         this.loadAlbums();
     }
 
     async loadAlbums() {
-        
-
         this.renderLoading();
         
-        let headers = metalpic.createHeaders();
-        let checkTokenResponse = await fetch(`/api/checktoken`, {
-            method: "GET",
-            headers: headers
-        });
-        if (checkTokenResponse.status != 200) {
+        let tokenValid = await CheckToken.isValid();
+        if (!tokenValid) {
             this.renderForbidden();
             return;
         }
@@ -41,16 +43,14 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
     }
 
     renderBase() {
-        this.innerHTML = `
-            <style>
-            </style>
-            <div data-body></div>
-        `;
+        this.innerHTML = '';
+        let body = document.createElement("div");
+        this.appendChild(body);
+        return body;
     }
 
     render() {
-        this.renderBase();
-        let body = this.querySelector("[data-body]");
+        let body = this.renderBase();
 
         for (let album of this.albumsData.albums) {
             // album: {name, public, created}
@@ -67,8 +67,7 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
     }
 
     renderLoading() {
-        this.renderBase();
-        let body = this.querySelector("[data-body]");
+        let body = this.renderBase();
 
         body.innerHTML = `
             <div>
@@ -78,8 +77,7 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
     }
 
     renderForbidden() {
-        this.renderBase();
-        let body = this.querySelector("[data-body]");
+        let body = this.renderBase();
 
         body.innerHTML = `
             <div>
