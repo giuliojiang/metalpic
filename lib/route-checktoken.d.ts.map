@@ -1,1 +1,1 @@
-{"version":3,"file":"route-checktoken.d.ts","sourceRoot":"","sources":["../src/route-checktoken.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,GAAG,QAAQ,SAAS,CAAC,CAAC;AAUpC,QAAA,IAAI,iBAAiB,uBAWpB,CAAA;AAED,OAAO,EACH,iBAAiB,EACpB,CAAA"}
+{"version":3,"file":"route-checktoken.d.ts","sourceRoot":"","sources":["../src/route-checktoken.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,GAAG,QAAQ,SAAS,CAAC,CAAC;AAWpC,QAAA,IAAI,iBAAiB,uBAiBpB,CAAA;AAED,OAAO,EACH,iBAAiB,EACpB,CAAA"}

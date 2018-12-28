@@ -129,6 +129,48 @@ module.exports = _createClass;
 /* 3 */
 /***/ (function(module, exports) {
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
 function _getPrototypeOf(o) {
   module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
     return o.__proto__ || Object.getPrototypeOf(o);
@@ -139,7 +181,7 @@ function _getPrototypeOf(o) {
 module.exports = _getPrototypeOf;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _typeof = __webpack_require__(18);
@@ -157,7 +199,7 @@ function _possibleConstructorReturn(self, call) {
 module.exports = _possibleConstructorReturn;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var setPrototypeOf = __webpack_require__(9);
@@ -180,10 +222,10 @@ function _inherits(subClass, superClass) {
 module.exports = _inherits;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getPrototypeOf = __webpack_require__(3);
+var getPrototypeOf = __webpack_require__(4);
 
 var setPrototypeOf = __webpack_require__(9);
 
@@ -226,48 +268,6 @@ function _wrapNativeSuper(Class) {
 }
 
 module.exports = _wrapNativeSuper;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
-module.exports = _asyncToGenerator;
 
 /***/ }),
 /* 8 */
@@ -2037,7 +2037,7 @@ var regenerator = __webpack_require__(0);
 var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__(7);
+var asyncToGenerator = __webpack_require__(3);
 var asyncToGenerator_default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/classCallCheck.js
@@ -2049,19 +2049,19 @@ var createClass = __webpack_require__(2);
 var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(4);
+var possibleConstructorReturn = __webpack_require__(5);
 var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(3);
+var getPrototypeOf = __webpack_require__(4);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/inherits.js
-var inherits = __webpack_require__(5);
+var inherits = __webpack_require__(6);
 var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
 
 // EXTERNAL MODULE: ../node_modules/@babel/runtime/helpers/wrapNativeSuper.js
-var wrapNativeSuper = __webpack_require__(6);
+var wrapNativeSuper = __webpack_require__(7);
 var wrapNativeSuper_default = /*#__PURE__*/__webpack_require__.n(wrapNativeSuper);
 
 // CONCATENATED MODULE: ./src/lib/style-collector.js
@@ -2547,7 +2547,75 @@ function (_HTMLElement) {
 
   return _class;
 }(wrapNativeSuper_default()(HTMLElement)));
+// CONCATENATED MODULE: ./src/lib/check-token.js
+
+
+
+
+var check_token_CheckToken =
+/*#__PURE__*/
+function () {
+  function CheckToken() {
+    classCallCheck_default()(this, CheckToken);
+  }
+
+  createClass_default()(CheckToken, null, [{
+    key: "isValid",
+    // return: Promise<boolean>
+    value: function () {
+      var _isValid = asyncToGenerator_default()(
+      /*#__PURE__*/
+      regenerator_default.a.mark(function _callee() {
+        var headers, response, obj;
+        return regenerator_default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                headers = metalpic.createHeaders();
+                _context.next = 3;
+                return fetch("/api/checktoken", {
+                  method: "POST",
+                  headers: headers
+                });
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.status == 200)) {
+                  _context.next = 11;
+                  break;
+                }
+
+                _context.next = 7;
+                return response.json();
+
+              case 7:
+                obj = _context.sent;
+                return _context.abrupt("return", obj.valid);
+
+              case 11:
+                return _context.abrupt("return", false);
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function isValid() {
+        return _isValid.apply(this, arguments);
+      }
+
+      return isValid;
+    }()
+  }]);
+
+  return CheckToken;
+}();
 // CONCATENATED MODULE: ./src/elements/control-panel.js
+
 
 
 
@@ -2586,57 +2654,53 @@ function (_HTMLElement) {
       var _loadAlbums = asyncToGenerator_default()(
       /*#__PURE__*/
       regenerator_default.a.mark(function _callee() {
-        var headers, checkTokenResponse, httpResult;
+        var tokenValid, httpResult;
         return regenerator_default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 this.renderLoading();
-                headers = metalpic.createHeaders();
-                _context.next = 4;
-                return fetch("/api/checktoken", {
-                  method: "GET",
-                  headers: headers
-                });
+                _context.next = 3;
+                return check_token_CheckToken.isValid();
 
-              case 4:
-                checkTokenResponse = _context.sent;
+              case 3:
+                tokenValid = _context.sent;
 
-                if (!(checkTokenResponse.status != 200)) {
-                  _context.next = 8;
+                if (tokenValid) {
+                  _context.next = 7;
                   break;
                 }
 
                 this.renderForbidden();
                 return _context.abrupt("return");
 
-              case 8:
-                _context.next = 10;
+              case 7:
+                _context.next = 9;
                 return fetch("/list", {
                   method: "GET",
                   headers: headers
                 });
 
-              case 10:
+              case 9:
                 httpResult = _context.sent;
 
                 if (!(httpResult.status == 403)) {
-                  _context.next = 14;
+                  _context.next = 13;
                   break;
                 }
 
                 this.renderForbidden();
                 return _context.abrupt("return");
 
-              case 14:
-                _context.next = 16;
+              case 13:
+                _context.next = 15;
                 return httpResult.json();
 
-              case 16:
+              case 15:
                 this.albumsData = _context.sent;
                 this.render();
 
-              case 18:
+              case 17:
               case "end":
                 return _context.stop();
             }
@@ -2724,6 +2788,7 @@ function (_HTMLElement) {
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-hub-buttons",
 /*#__PURE__*/
@@ -2748,28 +2813,24 @@ function (_HTMLElement) {
       var _checkToken = asyncToGenerator_default()(
       /*#__PURE__*/
       regenerator_default.a.mark(function _callee() {
-        var headers, httpResponse;
+        var tokenValid;
         return regenerator_default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                headers = metalpic.createHeaders();
-                _context.next = 3;
-                return fetch("/api/checktoken", {
-                  method: "GET",
-                  headers: headers
-                });
+                _context.next = 2;
+                return check_token_CheckToken.isValid();
 
-              case 3:
-                httpResponse = _context.sent;
+              case 2:
+                tokenValid = _context.sent;
 
-                if (httpResponse.status == 200) {
+                if (tokenValid) {
                   this.render();
                 } else {
                   this.renderEmpty();
                 }
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -2997,6 +3058,7 @@ function (_HTMLElement) {
 
 
 
+
 console.info("Loading");
 window.customElements.define("metalpic-login",
 /*#__PURE__*/
@@ -3021,28 +3083,24 @@ function (_HTMLElement) {
       var _checkToken = asyncToGenerator_default()(
       /*#__PURE__*/
       regenerator_default.a.mark(function _callee() {
-        var headers, httpResponse;
+        var tokenValid;
         return regenerator_default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                headers = metalpic.createHeaders();
-                _context.next = 3;
-                return fetch("/api/checktoken", {
-                  method: "GET",
-                  headers: headers
-                });
+                _context.next = 2;
+                return check_token_CheckToken.isValid();
 
-              case 3:
-                httpResponse = _context.sent;
+              case 2:
+                tokenValid = _context.sent;
 
-                if (httpResponse.status == 200) {
+                if (tokenValid) {
                   this.renderLogout();
                 } else {
                   this.renderLogin();
                 }
 
-              case 5:
+              case 4:
               case "end":
                 return _context.stop();
             }

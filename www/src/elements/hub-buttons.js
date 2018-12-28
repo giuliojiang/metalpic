@@ -1,4 +1,5 @@
 import { metalpicStyleCollector } from "../lib/style-collector";
+import { CheckToken } from "../lib/check-token";
 
 console.info("Loading");
 
@@ -35,13 +36,8 @@ window.customElements.define("metalpic-hub-buttons", class extends HTMLElement {
     }
 
     async checkToken() {
-        let headers = metalpic.createHeaders();
-        let httpResponse = await fetch(`/api/checktoken`, {
-            method: "GET",
-            headers: headers
-        });
-
-        if (httpResponse.status == 200) {
+        let tokenValid = await CheckToken.isValid();
+        if (tokenValid) {
             this.render();
         } else {
             this.renderEmpty();

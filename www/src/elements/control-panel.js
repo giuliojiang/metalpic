@@ -1,4 +1,5 @@
 import { metalpicStyleCollector } from "../lib/style-collector";
+import { CheckToken } from "../lib/check-token";
 
 console.info("Loading");
 
@@ -21,12 +22,8 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
     async loadAlbums() {
         this.renderLoading();
         
-        let headers = metalpic.createHeaders();
-        let checkTokenResponse = await fetch(`/api/checktoken`, {
-            method: "GET",
-            headers: headers
-        });
-        if (checkTokenResponse.status != 200) {
+        let tokenValid = await CheckToken.isValid();
+        if (!tokenValid) {
             this.renderForbidden();
             return;
         }
