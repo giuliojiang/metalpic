@@ -1,3 +1,5 @@
+import { metalpicStyleCollector } from "../lib/style-collector";
+
 console.info("Loading");
 
 window.customElements.define("metalpic-control-panel-album", class extends HTMLElement {
@@ -13,22 +15,7 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
     }
 
     connectedCallback() {
-        this.renderFirst();
-    }
-
-    static get observedAttributes() {
-        return ["album"];
-    }
-
-    attributeChangedCallback(name, old, newValue) {
-        if (name == "album") {
-            this.album = JSON.parse(newValue);
-            this.render();
-        }
-    }
-
-    renderFirst() {
-        this.innerHTML = `
+        metalpicStyleCollector.register("control-panel-album.js", `
             <style>
                 .metalpic-control-panel-album-hcontainer {
                     display: flex;
@@ -53,12 +40,25 @@ window.customElements.define("metalpic-control-panel-album", class extends HTMLE
                     cursor: pointer;
                 }
             </style>
-            <div data-body></div>
-        `;
+        `);
+    }
+
+    static get observedAttributes() {
+        return ["album"];
+    }
+
+    attributeChangedCallback(name, old, newValue) {
+        if (name == "album") {
+            this.album = JSON.parse(newValue);
+            this.render();
+        }
     }
 
     render() {
-        let body = this.querySelector("[data-body]");
+        this.innerHTML = '';
+
+        let body = document.createElement("div");
+        this.appendChild(body);
 
         let container = document.createElement("div");
         body.appendChild(container);
