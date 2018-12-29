@@ -1,5 +1,3 @@
-import "@webcomponents/webcomponentsjs/webcomponents-bundle";
-
 import "./lib/metalpic";
 import "./lib/util";
 

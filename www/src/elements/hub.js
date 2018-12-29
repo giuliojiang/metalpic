@@ -10,6 +10,7 @@ window.customElements.define("metalpic-hub", class extends HTMLElement {
     }
 
     connectedCallback() {
+        document.title = "metalpic - Home";
         metalpicStyleCollector.register("hub.js", `
             <style>
                 .metalpic-hub-content-body {

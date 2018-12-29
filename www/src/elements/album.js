@@ -145,6 +145,7 @@ window.customElements.define("metalpic-album", class extends HTMLElement {
 
             // Add album name
             this.querySelector("[data-albumname]").innerText = this.albumName;
+            document.title = "metalpic - " + this.albumName;
 
             // Add pictures
 
