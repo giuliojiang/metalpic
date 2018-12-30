@@ -1,5 +1,6 @@
 import express = require("express");
 import { VHomeRoute } from "./vhome";
+import { VAlbumRoute } from "./valbum";
 
 // App mounted at /v
 
@@ -14,6 +15,8 @@ export class VRoutes {
         });
 
         app.use("/index", VHomeRoute.createApp());
+
+        app.use("/album", VAlbumRoute.createApp());
 
         return app;
 

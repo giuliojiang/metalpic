@@ -1,6 +1,6 @@
 import jsdom = require("jsdom");
 export declare class DomUtils {
-    static createNewDocument(): jsdom.JSDOM;
+    static createNewDocument(equivalentPath: string): jsdom.JSDOM;
     static addText(dom: jsdom.JSDOM, text: string): void;
     static addLink(dom: jsdom.JSDOM, text: string, destination: string): void;
     private static addInDiv;

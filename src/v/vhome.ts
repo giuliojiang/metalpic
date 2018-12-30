@@ -9,7 +9,7 @@ export class VHomeRoute {
         let app = express();
 
         app.get("/", async (req, res) => {
-            let dom = DomUtils.createNewDocument();
+            let dom = DomUtils.createNewDocument("/metalpic-hub");
 
             DomUtils.addText(dom, "Metalpic Web Components Pictures Album");
 
@@ -17,7 +17,7 @@ export class VHomeRoute {
             let albums = await mongoalbum.listAlbums(false);
 
             for (let album of albums) {
-                DomUtils.addLink(dom, album.name, `/v/album/${encodeURIComponent(album.name)}`);
+                DomUtils.addLink(dom, album.name, `/v/album/${encodeURIComponent(album.name)}/0`);
             }
 
             res.send(dom.serialize());

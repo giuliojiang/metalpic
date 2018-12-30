@@ -4,5 +4,5 @@ var detectorIsBot = function() {
 }
 
 if (!detectorIsBot()) {
-    window.location = "/metalpic-hub";
+    window.location = metalpic_equivalent_path;
 }

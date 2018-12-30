@@ -1,1 +1,1 @@
-{"version":3,"file":"route-album.d.ts","sourceRoot":"","sources":["../src/route-album.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,GAAG,QAAQ,SAAS,CAAC,CAAC;AA8BpC,QAAA,IAAI,YAAY,uBA6Cf,CAAA;AAED,OAAO,EACH,YAAY,EACf,CAAA"}
+{"version":3,"file":"route-album.d.ts","sourceRoot":"","sources":["../src/route-album.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,GAAG,QAAQ,SAAS,CAAC,CAAC;AA8BpC,QAAA,IAAI,YAAY,uBAyCf,CAAA;AAED,cAAM,kBAAmB,SAAQ,KAAK;CAAI;AAE1C,cAAM,sBAAuB,SAAQ,KAAK;CAAI;AAE9C,QAAA,IAAI,mBAAmB;;;EA2BtB,CAAA;AAED,OAAO,EACH,YAAY,EACZ,mBAAmB,EACnB,kBAAkB,EAClB,sBAAsB,EACzB,CAAA"}

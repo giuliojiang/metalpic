@@ -2,10 +2,13 @@ import jsdom = require("jsdom");
 
 export class DomUtils {
 
-    static createNewDocument(): jsdom.JSDOM {
+    static createNewDocument(equivalentPath: string): jsdom.JSDOM {
         let dom = new jsdom.JSDOM(`
         <!DOCTYPE html>
         <head>
+            <script>
+                var metalpic_equivalent_path = "${equivalentPath}";
+            </script>
             <script src="/v/detector.js"></script>
         </head>
         <body></body>
