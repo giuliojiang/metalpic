@@ -29,6 +29,10 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
 
     app.use(helmet());
 
+    app.get("/", (req, res) => {
+        res.redirect("/v/index");
+    })
+    
     app.use("/v", VRoutes.createApp());
     app.use("/", routeRedirector.redirectorHandler());
     app.use("/", express.static(path.resolve(__dirname, "..", "www")));

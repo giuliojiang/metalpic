@@ -3,7 +3,13 @@ import jsdom = require("jsdom");
 export class DomUtils {
 
     static createNewDocument(): jsdom.JSDOM {
-        let dom = new jsdom.JSDOM(`<!DOCTYPE html><head></head><body></body>`);
+        let dom = new jsdom.JSDOM(`
+        <!DOCTYPE html>
+        <head>
+            <script src="/v/detector.js"></script>
+        </head>
+        <body></body>
+        `);
         return dom;
     }
 
@@ -13,9 +19,23 @@ export class DomUtils {
         dom.window.document.body.appendChild(div);
     }
 
+    static addLink(dom: jsdom.JSDOM, text: string, destination: string): void {
+        this.addInDiv(dom, () => {
+            let div = dom.window.document.createElement("a");
+            div.innerHTML = this.escapeHtml(text);
+            div.setAttribute("href", destination);
+            return div;
+        });
+    }
 
+    private static addInDiv(dom: jsdom.JSDOM, func: () => HTMLElement): void {
+        let div = dom.window.document.createElement("div");
+        let elem = func();
+        div.appendChild(elem);
+        dom.window.document.body.appendChild(div);
+    }
 
-    static escapeHtml(s: string): string {
+    private static escapeHtml(s: string): string {
         return s
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
