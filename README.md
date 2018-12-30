@@ -16,6 +16,7 @@ https://metalpic.jstudios.ovh/
 * Frameworkless design
 * Bare metal CSS styles, minimalist look
 * Works with standard Cloudflare caching to reduce S3 load
+* Google crawlable
 
 # Web Components and Custom Elements client side logic
 
