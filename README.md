@@ -15,6 +15,7 @@ https://metalpic.jstudios.ovh/
 * MongoDB database
 * Frameworkless design
 * Bare metal CSS styles, minimalist look
+* Works with standard Cloudflare caching to reduce S3 load
 
 # Web Components and Custom Elements client side logic
 
