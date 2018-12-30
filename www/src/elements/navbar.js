@@ -7,7 +7,6 @@ window.customElements.define("metalpic-navbar", class extends HTMLElement {
 
     constructor() {
         super();
-        this.renderFirst();
     }
 
     connectedCallback() {

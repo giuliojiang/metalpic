@@ -2477,15 +2477,9 @@ function (_HTMLElement) {
   // Output events:
   // - metalpic-routechange
   function _class() {
-    var _this;
-
     classCallCheck_default()(this, _class);
 
-    _this = possibleConstructorReturn_default()(this, getPrototypeOf_default()(_class).call(this));
-
-    _this.renderFirst();
-
-    return _this;
+    return possibleConstructorReturn_default()(this, getPrototypeOf_default()(_class).call(this));
   }
 
   createClass_default()(_class, [{
