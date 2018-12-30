@@ -16,7 +16,7 @@ export class VAlbumRoute {
             try {
                 let page = parseInt(req.params.page);
 
-                let dom = DomUtils.createNewDocument(`/metalpic-album/${encodeURIComponent(req.params.albumname)}`);
+                let dom = DomUtils.createNewDocument(`/metalpic-album/${encodeURIComponent(req.params.albumname)}/${page}`);
 
                 // Get the album
                 let albumAndPictures = await routeAlbum.getAlbumAndPictures(req.params.albumname, page, false);

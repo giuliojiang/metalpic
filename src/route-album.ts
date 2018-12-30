@@ -8,7 +8,7 @@ import * as util from "./util";
 
 const logger = loggerFactory.getLogger("route-album");
 
-const ALBUM_PAGE_SIZE = 3;
+const ALBUM_PAGE_SIZE = 100;
 
 // Get list of pictures in an album
 
