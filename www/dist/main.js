@@ -2704,6 +2704,7 @@ function (_HTMLElement) {
 
     _this = possibleConstructorReturn_default()(this, getPrototypeOf_default()(_class).call(this));
     _this.lastHtml = "";
+    _this.lastRoute = null;
     _this.currentRoute = "";
     _this.currentPath = ""; // Detect initial route
 
@@ -2728,6 +2729,12 @@ function (_HTMLElement) {
   createClass_default()(_class, [{
     key: "changeRouteTo",
     value: function changeRouteTo(newRoute) {
+      if (this.lastRoute == newRoute) {
+        console.info("Last route was the same, skipping");
+        return;
+      }
+
+      this.lastRoute = newRoute;
       console.info("changeRouteTo: " + newRoute);
       this.renderNewState(newRoute);
     }

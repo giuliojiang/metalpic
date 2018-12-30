@@ -6,6 +6,7 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     constructor() {
         super();
         this.lastHtml = "";
+        this.lastRoute = null;
 
         this.currentRoute = "";
         this.currentPath = "";
@@ -27,6 +28,11 @@ window.customElements.define("metalpic-router", class extends HTMLElement {
     }
 
     changeRouteTo(newRoute) {
+        if (this.lastRoute == newRoute) {
+            console.info("Last route was the same, skipping");
+            return;
+        }
+        this.lastRoute = newRoute;
         console.info("changeRouteTo: " + newRoute);
         this.renderNewState(newRoute);
     }
