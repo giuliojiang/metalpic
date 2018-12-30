@@ -21,11 +21,9 @@
   },
   "homepage": "https://github.com/giuliojiang/metalpic#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
     "@babel/runtime": "^7.2.0",
     "@types/crypto-random-string": "^1.0.0",
     "@types/helmet": "0.0.42",
-    "@webcomponents/webcomponentsjs": "^2.2.1",
     "aws-sdk": "^2.368.0",
     "body-parser": "^1.18.3",
     "core-js": "^2.6.1",
