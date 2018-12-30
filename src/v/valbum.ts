@@ -10,21 +10,28 @@ export class VAlbumRoute {
     static createApp(): express.Express {
 
         let app = express();
-        
+
         app.get("/:albumname/:page", async (req, res) => {
             
             try {
+                let page = parseInt(req.params.page);
+
                 let dom = DomUtils.createNewDocument(`/metalpic-album/${encodeURIComponent(req.params.albumname)}`);
 
                 // Get the album
-                let albumAndPictures = await routeAlbum.getAlbumAndPictures(req.params.albumname, req.params.page, false);
+                let albumAndPictures = await routeAlbum.getAlbumAndPictures(req.params.albumname, page, false);
 
                 // Write album name
                 DomUtils.addText(dom, albumAndPictures.album.name);
 
                 // Write album pictures
                 for (let pic of albumAndPictures.pictures) {
-                    DomUtils.addText(dom, pic._id.toString());
+                    DomUtils.addPicture(dom, pic.name, `/api/image/${pic._id.toString()}/image.png`);
+                }
+
+                // Write link to next page
+                if (albumAndPictures.pictures.length > 0) {
+                    DomUtils.addLink(dom, "Next page", `/v/album/${encodeURIComponent(req.params.albumname)}/${(page + 1)}`);
                 }
 
                 res.send(dom.serialize());

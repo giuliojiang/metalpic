@@ -31,6 +31,15 @@ export class DomUtils {
         });
     }
 
+    static addPicture(dom: jsdom.JSDOM, alttext: string, imgsrc: string): void {
+        this.addInDiv(dom, () => {
+            let img = dom.window.document.createElement("img");
+            img.setAttribute("alt", alttext);
+            img.setAttribute("src", imgsrc);
+            return img;
+        });
+    }
+
     private static addInDiv(dom: jsdom.JSDOM, func: () => HTMLElement): void {
         let div = dom.window.document.createElement("div");
         let elem = func();
