@@ -1,7 +1,6 @@
 import * as mongoalbum from "./mongo-album";
 import express = require("express");
 import * as loggerFactory from "./logger";
-import * as conf from "./conf";
 import { HeaderAuthMiddleware } from "./middleware-header-auth";
 
 const logger = loggerFactory.getLogger("route-listalbums");

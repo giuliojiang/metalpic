@@ -14,6 +14,7 @@ import * as authentication from "./authentication";
 import { LoginRoute } from "./route-login";
 import * as s3 from "./s3";
 import helmet = require("helmet");
+import { VRoutes } from "./v/routes";
 
 var createApp = async function(config: conf.Conf): Promise<express.Express> {
     // init
@@ -28,6 +29,11 @@ var createApp = async function(config: conf.Conf): Promise<express.Express> {
 
     app.use(helmet());
 
+    app.get("/", (req, res) => {
+        res.redirect("/v/index");
+    })
+    
+    app.use("/v", VRoutes.createApp());
     app.use("/", routeRedirector.redirectorHandler());
     app.use("/", express.static(path.resolve(__dirname, "..", "www")));
     app.use("/api/upload", routeUpload.uploadHandler());

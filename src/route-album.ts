@@ -39,42 +39,74 @@ var albumHandler = function(): express.Express {
 
     app.post("/", async (req, res) => {
         let body = req.body;
-        let page = body.page;
 
-        if (!util.isNumber(page)) {
-            page = 0;
-        }
+        let authenticated: boolean = (req as any)["metalpic_authenticated"];
 
-        let album = await mongoAlbum.getAlbumByName(body.album);
+        try {
+            let albumAndPictures = await getAlbumAndPictures(body.album, body.page, authenticated);
 
-        // If album is private, user needs to be admin
-        if (!album.public) {
-            // Authenticate user
-            let authenticated: boolean = (req as any)["metalpic_authenticated"];
-            if (!authenticated) {
+            let result: any = {
+            };
+            result.pictures = [];
+            for (let pic of albumAndPictures.pictures) {
+                result.pictures.push({
+                    id: pic._id,
+                    name: pic.name
+                });
+            }
+            res.send(JSON.stringify(result));
+        } catch (err) {
+            if (err instanceof AlbumNotFoundError) {
+                res.sendStatus(404);
+            } else if (err instanceof AlbumUnauthorizedError) {
                 res.sendStatus(403);
-                return;
+            } else {
+                logger.error("Error", err);
+                res.sendStatus(500);
             }
         }
-
-        // Get the pictures in the album
-        let pictures = await mongoPic.getPicturesInAlbum(album._id, page * ALBUM_PAGE_SIZE, ALBUM_PAGE_SIZE);
-        let result: any = {
-        };
-        result.pictures = [];
-        for (let pic of pictures) {
-            result.pictures.push({
-                id: pic._id,
-                name: pic.name
-            });
-        }
-        res.send(JSON.stringify(result));
     });
 
     return app;
 
 }
 
+class AlbumNotFoundError extends Error { }
+
+class AlbumUnauthorizedError extends Error { }
+
+var getAlbumAndPictures = async function(albumname: string, page: number, authenticated: boolean): Promise<{
+    album: any,
+    pictures: any[]
+}> {
+    if (!util.isNumber(page)) {
+        page = 0;
+    }
+
+    let album = await mongoAlbum.getAlbumByName(albumname);
+    if (album == null) {
+        throw new AlbumNotFoundError();
+    }
+
+    // If album is private, user needs to be admin
+    if (!album.public) {
+        if (!authenticated) {
+            throw new AlbumUnauthorizedError();
+        }
+    }
+
+    // Get the pictures in the album
+    let pictures = await mongoPic.getPicturesInAlbum(album._id, page * ALBUM_PAGE_SIZE, ALBUM_PAGE_SIZE);
+
+    return {
+        album: album,
+        pictures: pictures
+    };
+}
+
 export {
-    albumHandler
+    albumHandler,
+    getAlbumAndPictures,
+    AlbumNotFoundError,
+    AlbumUnauthorizedError
 }
