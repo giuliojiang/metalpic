@@ -2,6 +2,20 @@
 
 Bare metal HTML web componenents based gallery and picture album
 
+# Live website
+
+https://metalpic.jstudios.ovh/
+
+# Main features
+
+* Upload and organize pictures into albums
+* Set albums as private or public
+* Single-user login with minimal configuration
+* Amazon S3-stored pictures
+* MongoDB database
+* Frameworkless design
+* Bare metal CSS styles, minimalist look
+
 # Web Components and Custom Elements client side logic
 
 All standard logic and resources fetching is client side.
