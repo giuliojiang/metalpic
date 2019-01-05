@@ -1884,7 +1884,7 @@ function (_HTMLElement) {
       var _loadAlbums = asyncToGenerator_default()(
       /*#__PURE__*/
       regenerator_default.a.mark(function _callee() {
-        var tokenValid, httpResult;
+        var tokenValid, headers, httpResult;
         return regenerator_default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -1905,32 +1905,33 @@ function (_HTMLElement) {
                 return _context.abrupt("return");
 
               case 7:
-                _context.next = 9;
+                headers = metalpic.createHeaders();
+                _context.next = 10;
                 return fetch("/list", {
                   method: "GET",
                   headers: headers
                 });
 
-              case 9:
+              case 10:
                 httpResult = _context.sent;
 
                 if (!(httpResult.status == 403)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
 
                 this.renderForbidden();
                 return _context.abrupt("return");
 
-              case 13:
-                _context.next = 15;
+              case 14:
+                _context.next = 16;
                 return httpResult.json();
 
-              case 15:
+              case 16:
                 this.albumsData = _context.sent;
                 this.render();
 
-              case 17:
+              case 18:
               case "end":
                 return _context.stop();
             }

@@ -28,6 +28,8 @@ window.customElements.define("metalpic-control-panel", class extends HTMLElement
             return;
         }
 
+        let headers = metalpic.createHeaders();
+
         let httpResult = await fetch(`/list`, {
             method: "GET",
             headers: headers
