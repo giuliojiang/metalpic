@@ -11,7 +11,8 @@ export class VHomeRoute {
         app.get("/", async (req, res) => {
             let dom = DomUtils.createNewDocument("/metalpic-hub");
 
-            DomUtils.addText(dom, "Metalpic Web Components Pictures Album");
+            DomUtils.addH1(dom, "Metalpic Web Components Pictures Album");
+            DomUtils.setTitle(dom, "Metalpic Web Components Pictures Album");
 
             // Load public albums
             let albums = await mongoalbum.listAlbums(false);

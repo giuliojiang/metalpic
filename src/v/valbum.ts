@@ -22,10 +22,14 @@ export class VAlbumRoute {
                 let albumAndPictures = await routeAlbum.getAlbumAndPictures(req.params.albumname, page, false);
 
                 // Write album name
-                DomUtils.addText(dom, albumAndPictures.album.name);
+                DomUtils.addH1(dom, albumAndPictures.album.name);
+
+                // Set title
+                DomUtils.setTitle(dom, `metalpic - ${albumAndPictures.album.name}`);
 
                 // Write album pictures
                 for (let pic of albumAndPictures.pictures) {
+                    DomUtils.addText(dom, pic.name);
                     DomUtils.addPicture(dom, pic.name, `/api/image/${pic._id.toString()}/image.png`);
                 }
 

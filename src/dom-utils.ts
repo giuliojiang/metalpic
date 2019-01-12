@@ -17,9 +17,19 @@ export class DomUtils {
     }
 
     static addText(dom: jsdom.JSDOM, text: string): void {
-        let div = dom.window.document.createElement("div");
-        div.innerHTML = this.escapeHtml(text);
-        dom.window.document.body.appendChild(div);
+        this.addInDiv(dom, () => {
+            let div = dom.window.document.createElement("div");
+            div.innerHTML = this.escapeHtml(text);
+            return div;
+        });
+    }
+
+    static addH1(dom: jsdom.JSDOM, text: string): void {
+        this.addInDiv(dom, () => {
+            let h1 = dom.window.document.createElement("h1");
+            h1.innerHTML = this.escapeHtml(text);
+            return h1;
+        });
     }
 
     static addLink(dom: jsdom.JSDOM, text: string, destination: string): void {
@@ -38,6 +48,10 @@ export class DomUtils {
             img.setAttribute("src", imgsrc);
             return img;
         });
+    }
+
+    static setTitle(dom: jsdom.JSDOM, title: string): void {
+        dom.window.document.title = title;
     }
 
     private static addInDiv(dom: jsdom.JSDOM, func: () => HTMLElement): void {
